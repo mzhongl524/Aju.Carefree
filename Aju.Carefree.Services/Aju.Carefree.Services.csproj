@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Aju.Carefree.IRepositories\Aju.Carefree.IRepositories.csproj" />
+    <ProjectReference Include="..\Aju.Carefree.IServices\Aju.Carefree.IServices.csproj" />
+  </ItemGroup>
+
+</Project>

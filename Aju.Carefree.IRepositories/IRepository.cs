@@ -12,7 +12,7 @@ namespace Aju.Carefree.IRepositories
     /// 仓储通用接口类
     /// </summary>
     /// <typeparam name="T">泛型实体类</typeparam>
-    public interface IRepository<T> : IDependency where T : class, new()
+    public interface IRepository<T>: IDependency where T : class, new()
     {
         #region Sync
         /// <summary>

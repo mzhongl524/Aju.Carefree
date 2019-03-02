@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using Aju.Carefree.AutoMapperConfig;
 using Aju.Carefree.Common;
 using Aju.Carefree.Common.DataBaseCore;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +33,10 @@ namespace Aju.Carefree.WebManager
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            #region AutoMapper
+            services.AddAutoMapper();
+            #endregion
 
             #region Autofac
             var builder = new ContainerBuilder();//实例化 AutoFac  容器    
@@ -62,6 +68,8 @@ namespace Aju.Carefree.WebManager
             }
 
             app.UseStaticFiles();
+
+            Mappings.RegisterMappings();
 
             app.UseMvc(routes =>
             {

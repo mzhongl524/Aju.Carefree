@@ -8,12 +8,15 @@
   <ItemGroup>
     <PackageReference Include="Autofac.Configuration" Version="4.1.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.4.0" />
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Aju.Carefree.AutoMapperConfig\Aju.Carefree.AutoMapperConfig.csproj" />
     <ProjectReference Include="..\Aju.Carefree.Common\Aju.Carefree.Common.csproj" />
     <ProjectReference Include="..\Aju.Carefree.IServices\Aju.Carefree.IServices.csproj" />
     <ProjectReference Include="..\Aju.Carefree.Models\Aju.Carefree.Models.csproj" />

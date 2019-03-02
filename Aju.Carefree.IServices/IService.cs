@@ -8,7 +8,7 @@ using SqlSugar;
 
 namespace Aju.Carefree.IServices
 {
-    public interface IService<T> : IDependency
+    public interface IService<T>: IDependency
     {
         #region Sync
         /// <summary>

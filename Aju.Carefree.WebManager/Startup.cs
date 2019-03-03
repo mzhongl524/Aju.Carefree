@@ -39,6 +39,12 @@ namespace Aju.Carefree.WebManager
                     Configuration = _configuration.GetSection("Cache:ConnectionCacheStr").Value,
                     InstanceName = _configuration.GetSection("Cache:CacheInstanceName").Value
                 }));
+            //添加分布式缓存
+            services.AddDistributedRedisCache(option =>
+            {
+                option.Configuration = _configuration.GetSection("Cache:ConnectionCacheStr").Value;
+                option.InstanceName = _configuration.GetSection("Cache:CacheInstanceName").Value;
+            });
             #endregion
 
             services.AddMvc()

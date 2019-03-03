@@ -42,12 +42,16 @@ namespace Aju.Carefree.Cache
 
         public string GetString(string key)
         {
-            return _redisCache.GetString(key);
+            if (!string.IsNullOrEmpty(key))
+                return _redisCache.GetString(key);
+            return null;
         }
 
         public async Task<string> GetStringAsync(string key)
         {
-            return await _redisCache.GetStringAsync(key);
+            if (!string.IsNullOrEmpty(key))
+                return await _redisCache.GetStringAsync(key);
+            return null;
         }
         #endregion
 
@@ -63,7 +67,7 @@ namespace Aju.Carefree.Cache
             if (!string.IsNullOrEmpty(key))
             {
                 _redisCache.Set(key, Encoding.UTF8.GetBytes(value),
-                    new Microsoft.Extensions.Caching.Distributed.DistributedCacheEntryOptions
+                    new DistributedCacheEntryOptions
                     {
                         //设置绝对过期时间
                         AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(expirationTime)

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Aju.Carefree.AutoMapperConfig;
+using Aju.Carefree.Cache;
 using Aju.Carefree.Common;
 using Aju.Carefree.Common.DataBaseCore;
 using Autofac;
@@ -30,6 +31,15 @@ namespace Aju.Carefree.WebManager
         {
             //数据库连接字符串
             DbFactory.DbConnectionString = _configuration.GetConnectionString("DefaultConnection");
+
+            #region Redis
+            services.AddSingleton(typeof(ICacheService), new RedisCacheService(
+                new Microsoft.Extensions.Caching.Redis.RedisCacheOptions
+                {
+                    Configuration = _configuration.GetSection("Cache:ConnectionCacheStr").Value,
+                    InstanceName = _configuration.GetSection("Cache:CacheInstanceName").Value
+                }));
+            #endregion
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

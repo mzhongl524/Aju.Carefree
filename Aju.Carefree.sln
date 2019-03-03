@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aju.Carefree.AutoMapperConf
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aju.Carefree.Dto", "Aju.Carefree.Dto\Aju.Carefree.Dto.csproj", "{BBE4FD41-3C74-46AF-804F-269DC9888040}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aju.Carefree.Cache", "Aju.Carefree.Cache\Aju.Carefree.Cache.csproj", "{3FCFDC8C-E35C-4A88-8293-F83BEEA8FD52}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{BBE4FD41-3C74-46AF-804F-269DC9888040}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBE4FD41-3C74-46AF-804F-269DC9888040}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBE4FD41-3C74-46AF-804F-269DC9888040}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FCFDC8C-E35C-4A88-8293-F83BEEA8FD52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FCFDC8C-E35C-4A88-8293-F83BEEA8FD52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FCFDC8C-E35C-4A88-8293-F83BEEA8FD52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FCFDC8C-E35C-4A88-8293-F83BEEA8FD52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,6 +93,7 @@ Global
 		{107E5420-A05A-489A-9E1B-FCA25D2A2815} = {DAFB2C79-BB0E-428F-ABEA-0779D30D5775}
 		{51783790-FB2E-4587-9448-79E37251FBD8} = {28B18E0B-B0C3-4A6F-8446-01A54055A818}
 		{BBE4FD41-3C74-46AF-804F-269DC9888040} = {FB70001D-9EF3-4037-8E20-1523B46D2BED}
+		{3FCFDC8C-E35C-4A88-8293-F83BEEA8FD52} = {DAFB2C79-BB0E-428F-ABEA-0779D30D5775}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4E01A333-AC31-4CB3-856A-584D5F9F3974}

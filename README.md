@@ -2,12 +2,12 @@
 从零开始学习 【.Net Core2.2 Mvc|Api +SqlSugar + Autofac+ AutoMapper+Redis+...】
 
 ## 开源说明
- 1、采用.Net Core 2.2 框架进行搭建
- 2、采用了项目中常用的一些框架（如：Autofac、AutoMapper）
- 3、ORM采用了国人开发的开源工具（SqlSugar）
- 4、如遇见问题或有啥好的想法（任何疑问）请提Issues
- 6、以后将会在此项目中加入很多的开源项目
- 7、一起学习（最重要的一点）😄
+ 1、采用.Net Core 2.2 框架进行搭建 <br/>
+ 2、采用了项目中常用的一些框架（如：Autofac、AutoMapper）<br/>
+ 3、ORM采用了国人开发的开源工具（SqlSugar） <br/>
+ 4、如遇见问题或有啥好的想法（任何疑问）请提Issues <br/>
+ 5、以后将会在此项目中加入很多的开源项目 <br/>
+ 6、一起学习（最重要的一点）😄
 
 
 

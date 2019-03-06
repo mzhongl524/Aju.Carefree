@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Aju.Carefree.Common.DataBaseCore;
 using Aju.Carefree.Models;
 

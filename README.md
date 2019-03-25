@@ -1,5 +1,5 @@
 # Aju.Carefree
-从零开始学习 【.Net Core2.2 Mvc|Api +SqlSugar|Dapper + Autofac+ AutoMapper+Redis+...】
+从零开始学习 【.Net Core2.2 Mvc|Api +SqlSugar|Dapper + Autofac+ AutoMapper+Redis+Swagger...】
 
 ## 运行前说明
 1、下载到本地后，重新生成下解决方案<br/>

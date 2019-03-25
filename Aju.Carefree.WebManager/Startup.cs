@@ -4,6 +4,7 @@ using System.Reflection;
 using Aju.Carefree.AutoMapperConfig;
 using Aju.Carefree.Cache;
 using Aju.Carefree.Common;
+using Aju.Carefree.Common.DapperCore;
 using Aju.Carefree.Common.DataBaseCore;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
@@ -29,9 +30,10 @@ namespace Aju.Carefree.WebManager
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            //数据库连接字符串
+            //SqlSugar数据库连接字符串
             DbFactory.DbConnectionString = _configuration.GetConnectionString("DefaultConnection");
-
+            //Dapper数据库连接字符串
+            DapperHelper.DapperDbConnectionString = _configuration.GetConnectionString("DefaultConnection");
             #region Redis
             services.AddSingleton(typeof(ICacheService), new RedisCacheService(
                 new Microsoft.Extensions.Caching.Redis.RedisCacheOptions

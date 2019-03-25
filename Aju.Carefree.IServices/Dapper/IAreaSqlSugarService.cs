@@ -5,7 +5,7 @@ using Aju.Carefree.Models;
 
 namespace Aju.Carefree.IServices
 {
-    public interface IAreaService : IService<Areas>
+    public interface IAreaDapperService : IDapperService<Areas>
     {
     }
 }

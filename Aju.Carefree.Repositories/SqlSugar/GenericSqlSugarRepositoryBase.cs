@@ -15,7 +15,7 @@ namespace Aju.Carefree.Repositories
     /// GenericRepositoryBase
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class GenericRepositoryBase<T> : IRepository<T> where T : class, new()
+    public class GenericSqlSugarRepositoryBase<T> : ISqlSugarRepository<T> where T : class, new()
     {
         #region Sync
         /// <summary>

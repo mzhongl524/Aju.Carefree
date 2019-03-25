@@ -2,41 +2,38 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Aju.Carefree.Common;
 using Aju.Carefree.Common.Model;
-using Aju.Carefree.IRepositories;
-using Aju.Carefree.IServices;
 using SqlSugar;
 
-namespace Aju.Carefree.Services
+namespace Aju.Carefree.IRepositories
 {
-    public class GenericService<T> : IService<T> where T : class, new()
+    /// <summary>
+    /// 仓储通用接口类
+    /// </summary>
+    /// <typeparam name="T">泛型实体类</typeparam>
+    public interface ISqlSugarRepository<T>: IDependency where T : class, new()
     {
-        private readonly IRepository<T> _repository;
-        public GenericService(IRepository<T> repository) => _repository = repository;
-
         #region Sync
-
         /// <summary>
         /// 根据主值查询单条数据
         /// </summary>
         /// <param name="pkValue">主键值</param>
         /// <returns>泛型实体</returns>
-        public T FindById(object pkValue) => _repository.FindById(pkValue);
+        T FindById(object pkValue);
 
         /// <summary>
         /// 查询所有数据(无分页,请慎用)
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<T> FindAll() => _repository.FindAll();
-
+        IEnumerable<T> FindAll();
         /// <summary>
         /// 根据条件查询数据
         /// </summary>
         /// <param name="predicate">条件表达式树</param>
         /// <param name="orderBy">排序</param>
         /// <returns>泛型实体集合</returns>
-        public IEnumerable<T> FindListByClause(Expression<Func<T, bool>> predicate, string orderBy = "") =>
-            _repository.FindListByClause(predicate, orderBy);
+        IEnumerable<T> FindListByClause(Expression<Func<T, bool>> predicate, string orderBy = "");
 
         /// <summary>
         /// 根据条件分页查询
@@ -46,92 +43,90 @@ namespace Aju.Carefree.Services
         /// <param name="pageSize"></param>
         /// <param name="orderBy"></param>
         /// <returns></returns>
-        public IEnumerable<T> PageQuery(Expression<Func<T, bool>> predicate, int skip, int pageSize = 15,
-            string orderBy = "") => _repository.PageQuery(predicate, skip, pageSize, orderBy);
+        IEnumerable<T> PageQuery(Expression<Func<T, bool>> predicate, int skip, int pageSize = 15, string orderBy = "");
 
         /// <summary>
         /// 根据条件查询数据
         /// </summary>
         /// <param name="predicate">条件表达式树</param>
         /// <returns></returns>
-        public T FindByClause(Expression<Func<T, bool>> predicate) => _repository.FindByClause(predicate);
+        T FindByClause(Expression<Func<T, bool>> predicate);
 
         /// <summary>
         /// 写入实体数据
         /// </summary>
         /// <param name="entity">实体类</param>
         /// <returns></returns>
-        public int Insert(T entity) => _repository.Insert(entity);
+        int Insert(T entity);
 
         /// <summary>
         /// 更新实体数据
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public bool Update(T entity) => _repository.Update(entity);
+        bool Update(T entity);
 
         /// <summary>
         /// 删除数据
         /// </summary>
         /// <param name="entity">实体类</param>
         /// <returns></returns>
-        public bool Delete(T entity) => _repository.Delete(entity);
-
+        bool Delete(T entity);
         /// <summary>
         /// 删除数据
         /// </summary>
         /// <param name="where">过滤条件</param>
         /// <returns></returns>
-        public bool Delete(Expression<Func<T, bool>> @where) => _repository.Delete(@where);
+        bool Delete(Expression<Func<T, bool>> @where);
 
         /// <summary>
         /// 删除指定ID的数据
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public bool DeleteById(object id) => _repository.DeleteById(id);
+        bool DeleteById(object id);
 
         /// <summary>
         /// 删除指定ID集合的数据(批量删除)
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        public bool DeleteByIds(object[] ids) => _repository.DeleteByIds(ids);
+        bool DeleteByIds(object[] ids);
 
         /// <summary>
         /// 执行sql语句
         /// </summary>
         /// <param name="sql">sql 语句</param>
-        /// <param name="dynamic">参数</param>
+        /// <param name="parameters">参数</param>
         /// <returns></returns>
-        public IEnumerable<T> FindListBySql(string sql, object dynamic) => _repository.FindListBySql(sql, dynamic);
+        IEnumerable<T> FindListBySql(string sql, object dynamic);
 
         /// <summary>
         /// 批量插入 插入失败时 事务会自动回退
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public int Insert(List<T> t) => _repository.Insert(t);
+        int Insert(List<T> t);
 
         /// <summary>
         /// 事务
         /// </summary>
         /// <param name="func"></param>
         /// <returns></returns>
-        public DbResult<T> UserTran(Func<T> func) => _repository.UserTran(func);
+        DbResult<T> UserTran(Func<T> func);
 
         /// <summary>
         /// 事务
         /// </summary>
         /// <param name="action"></param>
-        public DbResult<bool> UserTran(Action action) => _repository.UserTran(action);
+        DbResult<bool> UserTran(Action action);
 
         /// <summary>
         /// 根据条件批量删除
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public int DeleteByClause(Expression<Func<T, bool>> predicate) => _repository.DeleteByClause(predicate);
+        int DeleteByClause(Expression<Func<T, bool>> predicate);
 
         // void ShadowCopy(object a, object b);
 
@@ -141,17 +136,15 @@ namespace Aju.Carefree.Services
         /// <param name="predicate"></param>
         /// <param name="pagination"></param>
         /// <returns></returns>
-        public List<T> FindList(Expression<Func<T, bool>> predicate, Pagination pagination) =>
-            _repository.FindList(predicate, pagination);
+        List<T> FindList(Expression<Func<T, bool>> predicate, Pagination pagination);
         #endregion
 
         #region Async
-
         /// <summary>
         /// 查询所有数据(无分页,请慎用)
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<T>> FindAllAsync() => await _repository.FindAllAsync();
+        Task<IEnumerable<T>> FindAllAsync();
 
         /// <summary>
         /// 根据条件查询数据
@@ -159,86 +152,71 @@ namespace Aju.Carefree.Services
         /// <param name="predicate">条件表达式树</param>
         /// <param name="orderBy">排序</param>
         /// <returns>泛型实体集合</returns>
-        public async Task<IEnumerable<T>> FindListByClauseAsync(Expression<Func<T, bool>> predicate,
-            string orderBy = "") => await _repository.FindListByClauseAsync(predicate, orderBy);
+        Task<IEnumerable<T>> FindListByClauseAsync(Expression<Func<T, bool>> predicate, string orderBy = "");
 
-        public async Task<IEnumerable<T>> PageQueryAsync(Expression<Func<T, bool>> predicate, int skip = 0,
-            int pageSize = 15, string orderBy = "") =>
-            await _repository.PageQueryAsync(predicate, skip, pageSize, orderBy);
-
-        public async Task<T> FindByClauseAsync(Expression<Func<T, bool>> predicate) =>
-            await _repository.FindByClauseAsync(predicate);
-
+        Task<IEnumerable<T>> PageQueryAsync(Expression<Func<T, bool>> predicate, int skip = 0, int pageSize = 15, string orderBy = "");
+        Task<T> FindByClauseAsync(Expression<Func<T, bool>> predicate);
         /// <summary>
         /// 插入实体数据
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<int> InsertAsync(T entity) => await _repository.InsertAsync(entity);
-
+        Task<int> InsertAsync(T entity);
         /// <summary>
         /// 更新实体数据
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<bool> UpdateAsync(T entity) => await _repository.UpdateAsync(entity);
-
+        Task<bool> UpdateAsync(T entity);
         /// <summary>
         /// DeleteAsync
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<bool> DeleteAsync(T entity) => await _repository.DeleteAsync(entity);
-
+        Task<bool> DeleteAsync(T entity);
         /// <summary>
         /// DeleteAsync
         /// </summary>
         /// <param name="where">条件表达式</param>
         /// <returns></returns>
-        public async Task<bool> DeleteAsync(Expression<Func<T, bool>> @where) => await _repository.DeleteAsync(@where);
-
+        Task<bool> DeleteAsync(Expression<Func<T, bool>> @where);
         /// <summary>
         /// DeleteByIdAsync
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<bool> DeleteByIdAsync(object id) => await _repository.DeleteByIdAsync(id);
-
+        Task<bool> DeleteByIdAsync(object id);
         /// <summary>
         /// DeleteByIdsAsync
         /// </summary>
         /// <param name="ids">ids</param>
         /// <returns></returns>
-        public async Task<bool> DeleteByIdsAsync(object[] ids) => await _repository.DeleteByIdsAsync(ids);
-
+        Task<bool> DeleteByIdsAsync(object[] ids);
         /// <summary>
         /// InsertAsync
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public async Task<DbResult<Task<int>>> InsertAsync(List<T> t) => await _repository.InsertAsync(t);
-
+        Task<DbResult<Task<int>>> InsertAsync(List<T> t);
         /// <summary>
         /// DeleteByClauseAsync
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public async Task<int> DeleteByClauseAsync(Expression<Func<T, bool>> predicate) =>
-            await _repository.DeleteByClauseAsync(predicate);
+        Task<int> DeleteByClauseAsync(Expression<Func<T, bool>> predicate);
 
         /// <summary>
         /// 事务
         /// </summary>
         /// <param name="func"></param>
         /// <returns></returns>
-        public async Task<DbResult<T>> UserTranAsync(Func<T> func) => await _repository.UserTranAsync(func);
+        Task<DbResult<T>> UserTranAsync(Func<T> func);
 
         /// <summary>
         /// 事务
         /// </summary>
         /// <param name="action"></param>
-        public async Task<DbResult<bool>> UserTranAsync(Action action) => await _repository.UserTranAsync(action);
-
+        Task<DbResult<bool>> UserTranAsync(Action action);
         #endregion
     }
 }

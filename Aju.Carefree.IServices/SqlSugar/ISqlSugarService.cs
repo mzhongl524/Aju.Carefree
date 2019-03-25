@@ -6,13 +6,9 @@ using Aju.Carefree.Common;
 using Aju.Carefree.Common.Model;
 using SqlSugar;
 
-namespace Aju.Carefree.IRepositories
+namespace Aju.Carefree.IServices
 {
-    /// <summary>
-    /// 仓储通用接口类
-    /// </summary>
-    /// <typeparam name="T">泛型实体类</typeparam>
-    public interface IRepository<T>: IDependency where T : class, new()
+    public interface ISqlSugarService<T>: IDependency
     {
         #region Sync
         /// <summary>
@@ -97,7 +93,7 @@ namespace Aju.Carefree.IRepositories
         /// 执行sql语句
         /// </summary>
         /// <param name="sql">sql 语句</param>
-        /// <param name="parameters">参数</param>
+        /// <param name="dynamic">参数</param>
         /// <returns></returns>
         IEnumerable<T> FindListBySql(string sql, object dynamic);
 

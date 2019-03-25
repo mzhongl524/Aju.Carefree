@@ -10,12 +10,12 @@ namespace Aju.Carefree.WebManager.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IAreaService _areaService;
+        private readonly IAreaSqlSugarService _areaService;
         private readonly ICacheService _cacheService;
         private IMapper _mapper { get; set; }
 
 
-        public HomeController(IAreaService areaService, IMapper mapper, ICacheService cacheService)
+        public HomeController(IAreaSqlSugarService areaService, IMapper mapper, ICacheService cacheService)
         {
             _areaService = areaService;
             _mapper = mapper;

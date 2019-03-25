@@ -3,7 +3,7 @@ using Aju.Carefree.Models;
 
 namespace Aju.Carefree.Repositories
 {
-    public class AreaRepository : GenericRepositoryBase<Areas>, IAreaRepository
+    public class AreaSqlSugarRepository : GenericSqlSugarRepositoryBase<Areas>, IAreaSqlSugarRepository
     {
     }
 }

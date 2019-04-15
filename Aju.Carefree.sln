@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.271
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aju.Carefree.Models", "Aju.Carefree.Models\Aju.Carefree.Models.csproj", "{20D86A91-9A59-4C2C-9D33-3EC6A1DB8F22}"
 EndProject
@@ -37,13 +37,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aju.Carefree.GenerateDataba
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microservice", "Microservice", "{CBF506BC-231C-4AAC-9E9D-FBF1CE2B8501}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aju.Carefree.IdentityServer", "Aju.Carefree.IdentityServer\Aju.Carefree.IdentityServer.csproj", "{524D012B-0748-4E80-BCD0-DCF55AD24CC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aju.Carefree.IdentityServer", "Aju.Carefree.IdentityServer\Aju.Carefree.IdentityServer.csproj", "{524D012B-0748-4E80-BCD0-DCF55AD24CC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aju.Carefree.Api", "Aju.Carefree.Api\Aju.Carefree.Api.csproj", "{14F7552B-0C85-4EAA-BFF4-B247FA1EADF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aju.Carefree.Api", "Aju.Carefree.Api\Aju.Carefree.Api.csproj", "{14F7552B-0C85-4EAA-BFF4-B247FA1EADF2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{DC755F9A-510F-4461-B764-D28D85BFCB27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aju.Carefree.IdentityServerClient", "Aju.Carefree.IdentityServerClient\Aju.Carefree.IdentityServerClient.csproj", "{E083E191-A9BB-4908-8B18-B5CC203E8430}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aju.Carefree.IdentityServerClient", "Aju.Carefree.IdentityServerClient\Aju.Carefree.IdentityServerClient.csproj", "{E083E191-A9BB-4908-8B18-B5CC203E8430}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -14,6 +14,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
+using NLog.Web;
 
 namespace Aju.Carefree.WebManager
 {
@@ -78,14 +81,20 @@ namespace Aju.Carefree.WebManager
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UseStaticFiles();
+
+            //使用NLog记录日志
+            loggerFactory.AddNLog();
+            //引入Nlog配置文件
+            env.ConfigureNLog("nlog.config");
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseStaticFiles();
 
             Mappings.RegisterMappings();
 

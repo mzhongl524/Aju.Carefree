@@ -26,3 +26,4 @@
 ##  AutoMapper      : http://automapper.org/
 ##  Redis           : https://redis.io/
 ##  IdentityServer4 : https://github.com/IdentityServer
+##  NLog            : https://nlog-project.org/

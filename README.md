@@ -28,4 +28,4 @@
 ##  IdentityServer4 : https://github.com/IdentityServer
 ##  NLog            : https://nlog-project.org/
 ##  Elasticsearch.Net  ：https://www.elastic.co/guide/en/elasticsearch/client/net-api/current/index.html
-                       ：https://github.com/elastic/elasticsearch-net
+##  Elasticsearch.Net（GitHub） ：https://github.com/elastic/elasticsearch-net

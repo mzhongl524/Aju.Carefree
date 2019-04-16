@@ -52,6 +52,8 @@ namespace Aju.Carefree.WebManager
             });
             #endregion
 
+            
+
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 

@@ -22,6 +22,12 @@ namespace Aju.Carefree.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            #region Elasticsearch
+            //添加单例依赖注入
+            services.AddSingleton<IEsClientProvider, EsClientProvider>();
+            #endregion
+
             services.AddAuthorization();
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>

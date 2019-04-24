@@ -32,4 +32,4 @@
 
 
 # 本人运营二维码，用于分享DotNet知识!
-![Image text](https://raw.githubusercontent.com/hongmaju/light7Local/master/img/productShow/20170518152848.png)
+![Image text](https://github.com/AjuPrince/Aju.Carefree/blob/master/Aju.Carefree.WebManager/Images/CodeQr.jpg)

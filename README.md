@@ -29,3 +29,7 @@
 ##  NLog            : https://nlog-project.org/
 ##  Elasticsearch.Net  ：https://www.elastic.co/guide/en/elasticsearch/client/net-api/current/index.html
 ##  Elasticsearch.Net（GitHub） ：https://github.com/elastic/elasticsearch-net
+
+
+# 本人运营二维码，用于分享DotNet知识!
+![Image text](https://raw.githubusercontent.com/hongmaju/light7Local/master/img/productShow/20170518152848.png)

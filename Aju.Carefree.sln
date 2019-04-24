@@ -45,6 +45,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{DC755F9A-5
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aju.Carefree.IdentityServerClient", "Aju.Carefree.IdentityServerClient\Aju.Carefree.IdentityServerClient.csproj", "{E083E191-A9BB-4908-8B18-B5CC203E8430}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{EBBFB013-5161-4284-8273-3484872260EA}"
+	ProjectSection(SolutionItems) = preProject
+		C:\Users\Prince\Desktop\CodeQr.jpg = C:\Users\Prince\Desktop\CodeQr.jpg
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

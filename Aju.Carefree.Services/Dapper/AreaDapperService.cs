@@ -1,6 +1,6 @@
 ﻿using Aju.Carefree.IRepositories;
 using Aju.Carefree.IServices;
-using Aju.Carefree.Models;
+using Aju.Carefree.Entity;
 
 namespace Aju.Carefree.Services
 {

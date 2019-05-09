@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Aju.Carefree.Dto\Aju.Carefree.Dto.csproj" />
-    <ProjectReference Include="..\Aju.Carefree.Models\Aju.Carefree.Models.csproj" />
+    <ProjectReference Include="..\Aju.Carefree.Entity\Aju.Carefree.Entity.csproj" />
   </ItemGroup>
 
 </Project>

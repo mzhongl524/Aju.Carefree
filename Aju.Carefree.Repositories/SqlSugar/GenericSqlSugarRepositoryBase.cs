@@ -25,7 +25,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public T FindById(object pkValue)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return db.Queryable<T>().InSingle(pkValue);
             }
@@ -37,7 +37,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public IEnumerable<T> FindAll()
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return db.Queryable<T>().ToList();
             }
@@ -51,7 +51,7 @@ namespace Aju.Carefree.Repositories
         /// <returns>泛型实体集合</returns>
         public IEnumerable<T> FindListByClause(Expression<Func<T, bool>> predicate, string orderBy = "")
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 var query = db.Queryable<T>().Where(predicate);
                 if (!string.IsNullOrEmpty(orderBy))
@@ -71,7 +71,7 @@ namespace Aju.Carefree.Repositories
         public IEnumerable<T> PageQuery(Expression<Func<T, bool>> predicate, int skip, int pageSize = 15,
             string orderBy = "")
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 if (skip > 0)
                     skip = pageSize * skip;
@@ -89,7 +89,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public T FindByClause(Expression<Func<T, bool>> predicate)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return db.Queryable<T>().First(predicate);
             }
@@ -102,7 +102,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public int Insert(T entity)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return db.Insertable(entity).ExecuteCommand();
             }
@@ -115,7 +115,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public bool Update(T entity)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return db.Updateable(entity).ExecuteCommand() > 0;
             }
@@ -128,7 +128,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public bool Delete(T entity)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return db.Deleteable(entity).ExecuteCommand() > 0;
             }
@@ -141,7 +141,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public bool Delete(Expression<Func<T, bool>> @where)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return db.Deleteable<T>(@where).ExecuteCommand() > 0;
             }
@@ -154,7 +154,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public bool DeleteById(object id)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return db.Deleteable<T>(id).ExecuteCommand() > 0;
             }
@@ -167,7 +167,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public bool DeleteByIds(object[] ids)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return db.Deleteable<T>().In(ids).ExecuteCommand() > 0;
             }
@@ -181,7 +181,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public IEnumerable<T> FindListBySql(string sql, object dynamic)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return db.Ado.SqlQuery<T>(sql, dynamic);
             }
@@ -194,7 +194,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public int Insert(List<T> t)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return db.Ado.UseTran(() => db.Insertable(t.ToArray()).ExecuteCommand()).Data;
             }
@@ -207,7 +207,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public DbResult<T> UserTran(Func<T> func)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return db.Ado.UseTran(func.Invoke);
             }
@@ -219,7 +219,7 @@ namespace Aju.Carefree.Repositories
         /// <param name="action"></param>
         public DbResult<bool> UserTran(Action action)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return db.Ado.UseTran(action.Invoke);
             }
@@ -232,7 +232,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public int DeleteByClause(Expression<Func<T, bool>> predicate)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return db.Deleteable<T>().Where(predicate).ExecuteCommand();
             }
@@ -251,7 +251,7 @@ namespace Aju.Carefree.Repositories
             var isAsc = pagination.sord.ToLower() == "asc";
             string[] _order = pagination.sidx.Split(',');
             MethodCallExpression resultExp = null;
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 var tempData = db.Queryable<T>().Where(predicate).ToList().AsQueryable();
                 foreach (string item in _order)
@@ -286,7 +286,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public async Task<IEnumerable<T>> FindAllAsync()
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return await db.Queryable<T>().ToListAsync();
             }
@@ -300,7 +300,7 @@ namespace Aju.Carefree.Repositories
         /// <returns>泛型实体集合</returns>
         public async Task<IEnumerable<T>> FindListByClauseAsync(Expression<Func<T, bool>> predicate, string orderBy = "")
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 var query = db.Queryable<T>().Where(predicate);
                 if (!string.IsNullOrEmpty(orderBy))
@@ -314,7 +314,7 @@ namespace Aju.Carefree.Repositories
         public async Task<IEnumerable<T>> PageQueryAsync(Expression<Func<T, bool>> predicate, int skip = 0,
             int pageSize = 15, string orderBy = "")
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 if (skip > 0)
                     skip = pageSize * skip;
@@ -329,7 +329,7 @@ namespace Aju.Carefree.Repositories
 
         public async Task<T> FindByClauseAsync(Expression<Func<T, bool>> predicate)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return await db.Queryable<T>().FirstAsync(predicate);
             }
@@ -342,7 +342,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public async Task<int> InsertAsync(T entity)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return await db.Insertable(entity).ExecuteCommandAsync();
             }
@@ -355,7 +355,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public async Task<bool> UpdateAsync(T entity)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return await db.Updateable(entity).ExecuteCommandAsync() > 0;
             }
@@ -368,7 +368,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public async Task<bool> DeleteAsync(T entity)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return await db.Deleteable(entity).ExecuteCommandAsync() > 0;
             }
@@ -381,7 +381,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public async Task<bool> DeleteAsync(Expression<Func<T, bool>> @where)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return await db.Deleteable(@where).ExecuteCommandAsync() > 0;
             }
@@ -394,7 +394,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public async Task<bool> DeleteByIdAsync(object id)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return await db.Deleteable<T>(id).ExecuteCommandAsync() > 0;
             }
@@ -407,7 +407,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public async Task<bool> DeleteByIdsAsync(object[] ids)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return await db.Deleteable<T>().In(ids).ExecuteCommandAsync() > 0;
             }
@@ -420,7 +420,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public async Task<DbResult<Task<int>>> InsertAsync(List<T> t)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return await db.Ado.UseTranAsync(async () => await db.Insertable(t.ToArray()).ExecuteCommandAsync());
             }
@@ -433,7 +433,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public async Task<int> DeleteByClauseAsync(Expression<Func<T, bool>> predicate)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return await db.Deleteable<T>().Where(predicate).ExecuteCommandAsync();
             }
@@ -446,7 +446,7 @@ namespace Aju.Carefree.Repositories
         /// <returns></returns>
         public async Task<DbResult<T>> UserTranAsync(Func<T> func)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return await db.Ado.UseTranAsync(func.Invoke);
             }
@@ -458,7 +458,7 @@ namespace Aju.Carefree.Repositories
         /// <param name="action"></param>
         public async Task<DbResult<bool>> UserTranAsync(Action action)
         {
-            using (var db = DbFactory.GetSqlSugarClient)
+            using (var db = DbFactory.DB)
             {
                 return await db.Ado.UseTranAsync(action.Invoke);
             }

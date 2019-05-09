@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Aju.Carefree.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using Aju.Carefree.Web.Models;
+using System.Diagnostics;
 
 namespace Aju.Carefree.Web.Controllers
 {

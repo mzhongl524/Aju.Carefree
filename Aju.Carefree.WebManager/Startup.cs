@@ -34,7 +34,8 @@ namespace Aju.Carefree.WebManager
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             //SqlSugar数据库连接字符串
-            DbFactory.DbConnectionString = _configuration.GetConnectionString("DefaultConnection");
+            //DbFactory.DbConnectionString = _configuration.GetConnectionString("DefaultConnection");
+            services.AddSingleton<DbFactory>();
             //Dapper数据库连接字符串
             DapperHelper.DapperDbConnectionString = _configuration.GetConnectionString("DefaultConnection");
             #region Redis
@@ -52,7 +53,7 @@ namespace Aju.Carefree.WebManager
             });
             #endregion
 
-            
+
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

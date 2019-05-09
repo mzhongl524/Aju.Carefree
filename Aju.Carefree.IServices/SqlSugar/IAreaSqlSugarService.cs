@@ -1,4 +1,4 @@
-﻿using Aju.Carefree.Models;
+﻿using Aju.Carefree.Entity;
 
 namespace Aju.Carefree.IServices
 {

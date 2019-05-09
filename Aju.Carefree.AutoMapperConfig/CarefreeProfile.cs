@@ -1,5 +1,5 @@
 ﻿using Aju.Carefree.Dto;
-using Aju.Carefree.Models;
+using Aju.Carefree.Entity;
 using AutoMapper;
 
 namespace Aju.Carefree.AutoMapperConfig

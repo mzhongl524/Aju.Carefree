@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Aju.Carefree.Models;
+using Aju.Carefree.Entity;
 
 namespace Aju.Carefree.IServices
 {

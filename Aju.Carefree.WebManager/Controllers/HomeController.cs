@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Aju.Carefree.Cache;
 using Aju.Carefree.Dto;
+using Aju.Carefree.Entity;
 using Aju.Carefree.IServices;
-using Aju.Carefree.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 

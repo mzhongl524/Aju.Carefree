@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Redis;
+using System;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Caching.Redis;
 
 namespace Aju.Carefree.Cache
 {
@@ -39,7 +39,6 @@ namespace Aju.Carefree.Cache
                 returnString = Encoding.UTF8.GetString(value);
             return returnString;
         }
-
         public string GetString(string key)
         {
             if (!string.IsNullOrEmpty(key))
@@ -89,7 +88,7 @@ namespace Aju.Carefree.Cache
             if (!string.IsNullOrEmpty(key))
             {
                 await _redisCache.SetAsync(key, Encoding.UTF8.GetBytes(value),
-                       new Microsoft.Extensions.Caching.Distributed.DistributedCacheEntryOptions
+                       new DistributedCacheEntryOptions
                        {
                            //设置绝对过期时间
                            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(expirationTime)

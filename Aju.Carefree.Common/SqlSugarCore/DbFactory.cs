@@ -21,26 +21,4 @@ namespace Aju.Carefree.Common.DataBaseCore
             return db;
         }
     }
-
-    //public static class DbFactory
-    //{
-    //    //  private IConfiguration _configuration { get; set; }
-    //    public static void AddConfiguration()
-    //    {
-
-    //    }
-    //    //private static IConfiguration _configuration;
-    //    //public DbFactory(IConfiguration configuration)
-    //    //{
-    //    //    _configuration = configuration;
-    //    //}
-    //    ////SqlSugar
-    //    public static SqlSugarClient GetSqlSugarClient() => new SqlSugarClient(new ConnectionConfig()
-    //    {
-    //        ConnectionString = configuration.GetConnectionString("DefaultConnection"),
-    //        DbType = DbType.SqlServer,
-    //        IsAutoCloseConnection = true,
-    //        InitKeyType = InitKeyType.Attribute
-    //    });
-    //}
 }

@@ -95,7 +95,7 @@ namespace Aju.Carefree.Cache
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <param name="expirationTime"></param>
-        Task ModifyAsync(string key, string value, int expirationTime = 20); 
+        Task ModifyAsync(string key, string value, int expirationTime = 20);
         #endregion
     }
 }

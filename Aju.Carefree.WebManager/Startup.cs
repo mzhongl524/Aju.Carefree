@@ -52,9 +52,6 @@ namespace Aju.Carefree.WebManager
                 option.InstanceName = _configuration.GetSection("Cache:CacheInstanceName").Value;
             });
             #endregion
-
-
-
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 

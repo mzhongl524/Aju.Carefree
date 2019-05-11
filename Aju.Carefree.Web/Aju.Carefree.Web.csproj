@@ -687,6 +687,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
   </ItemGroup>
 
 
@@ -1012,6 +1013,11 @@
     <None Include="wwwroot\bower_components\jvectormap\lib\vml-shape-element.js" />
     <None Include="wwwroot\bower_components\jvectormap\lib\world-map.js" />
     <None Include="wwwroot\bower_components\jvectormap\README.md" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\Aju.Carefree.Cache\Aju.Carefree.Cache.csproj" />
   </ItemGroup>
 
 </Project>

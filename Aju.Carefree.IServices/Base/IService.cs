@@ -2,7 +2,7 @@
 
 namespace Aju.Carefree.IServices
 {
-    public interface ISqlSugarService : IDependency
+    public interface IService<T, TKey> : IDependency where T : class, new()
     {
 
     }

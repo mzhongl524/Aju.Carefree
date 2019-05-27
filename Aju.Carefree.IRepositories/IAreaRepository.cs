@@ -2,7 +2,7 @@
 
 namespace Aju.Carefree.IRepositories
 {
-    public interface IAreaSqlSugarRepository : ISqlSugarRepository<Areas, string>
+    public interface IAreaRepository : ISqlSugarRepository<Areas, string>
     {
 
     }

@@ -8,23 +8,24 @@ namespace Aju.Carefree.WebManager.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IAreaSqlSugarService _areaService;
+        private readonly IAreaService _areaService;
         private readonly ICacheService _cacheService;
         private IMapper _mapper { get; set; }
 
 
-        public HomeController(IAreaSqlSugarService areaService, IMapper mapper, ICacheService cacheService)
+        public HomeController(IAreaService areaService, IMapper mapper, ICacheService cacheService)
         {
             _areaService = areaService;
             _mapper = mapper;
             _cacheService = cacheService;
         }
 
-        //public async Task<IActionResult> Index()
-        //{
-        //  //  var model = await _areaService.FindByClauseAsync(s => s.Code.Equals("110000000000"));
-        //    return Content(model.Code);
-        //}
+        public IActionResult Index()
+        {
+            //  var model = await _areaService.FindByClauseAsync(s => s.Code.Equals("110000000000"));
+            var model = _areaService.FindToPK("110000000000");
+            return Content(model.Name);
+        }
 
         ////AutoMapper
         //public async Task<IActionResult> Mapper(string code = "110000000000")

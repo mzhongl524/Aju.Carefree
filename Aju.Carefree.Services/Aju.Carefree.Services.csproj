@@ -5,12 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Aju.Carefree.IRepositories\Aju.Carefree.IRepositories.csproj" />
-    <ProjectReference Include="..\Aju.Carefree.IServices\Aju.Carefree.IServices.csproj" />
+    <Compile Remove="Dapper\**" />
+    <EmbeddedResource Remove="Dapper\**" />
+    <None Remove="Dapper\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dapper\" />
+    <ProjectReference Include="..\Aju.Carefree.IRepositories\Aju.Carefree.IRepositories.csproj" />
+    <ProjectReference Include="..\Aju.Carefree.IServices\Aju.Carefree.IServices.csproj" />
   </ItemGroup>
 
 </Project>

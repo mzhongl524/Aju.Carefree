@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper.SimpleCRUD" Version="2.1.0" />
     <PackageReference Include="sqlSugarCore" Version="4.9.9.10" />
   </ItemGroup>
 

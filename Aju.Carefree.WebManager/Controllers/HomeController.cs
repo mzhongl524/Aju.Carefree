@@ -1,10 +1,8 @@
-﻿using System.Threading.Tasks;
-using Aju.Carefree.Cache;
-using Aju.Carefree.Dto;
-using Aju.Carefree.Entity;
+﻿using Aju.Carefree.Cache;
 using Aju.Carefree.IServices;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace Aju.Carefree.WebManager.Controllers
 {
@@ -22,19 +20,19 @@ namespace Aju.Carefree.WebManager.Controllers
             _cacheService = cacheService;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            var model = await _areaService.FindByClauseAsync(s => s.Code.Equals("110000000000"));
-            return Content(model.Code);
-        }
+        //public async Task<IActionResult> Index()
+        //{
+        //  //  var model = await _areaService.FindByClauseAsync(s => s.Code.Equals("110000000000"));
+        //    return Content(model.Code);
+        //}
 
-        //AutoMapper
-        public async Task<IActionResult> Mapper(string code = "110000000000")
-        {
-            var model = await _areaService.FindByClauseAsync(s => s.Code.Equals(code));
-            var dto = _mapper.Map<Areas, AreasDto>(model);
-            return Content(dto.Name);
-        }
+        ////AutoMapper
+        //public async Task<IActionResult> Mapper(string code = "110000000000")
+        //{
+        //    var model = await _areaService.FindByClauseAsync(s => s.Code.Equals(code));
+        //    var dto = _mapper.Map<Areas, AreasDto>(model);
+        //    return Content(dto.Name);
+        //}
 
         public async Task<IActionResult> CacheDemo()
         {

@@ -4,9 +4,10 @@ using Aju.Carefree.Entity;
 
 namespace Aju.Carefree.Services
 {
-    public class AreaSqlSugarService : GenericSqlSugarService<Areas>, IAreaSqlSugarService
+    public class AreaSqlSugarService : IAreaSqlSugarService
     {
         private readonly IAreaSqlSugarRepository _areaRepository;
-        public AreaSqlSugarService(IAreaSqlSugarRepository areaRepository) : base(areaRepository) => _areaRepository = areaRepository;
+        public AreaSqlSugarService(IAreaSqlSugarRepository areaRepository)
+            => _areaRepository = areaRepository;
     }
 }

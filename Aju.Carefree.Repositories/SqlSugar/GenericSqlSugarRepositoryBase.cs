@@ -8,7 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Aju.Carefree.Repositories
+namespace Aju.Carefree.Repositories.SqlSugar
 {
     /// <summary>
     /// GenericRepositoryBase
@@ -30,11 +30,11 @@ namespace Aju.Carefree.Repositories
             }
         }
 
-        private object SqlSugarExt(Func<SqlSugarClient, Task<object>> func)
+        private async Task<object> SqlSugarExtAsync(Func<SqlSugarClient, Task<object>> func)
         {
             using (var db = DbFactory.DB(_ConnStr))
             {
-                return func.Invoke(db);
+                return await func.Invoke(db);
             }
         }
 
@@ -500,12 +500,14 @@ namespace Aju.Carefree.Repositories
 
         public Task<bool> DeleteAsync(T entity)
         {
-            return (Task<bool>)SqlSugarExt(async (db) => await db.Deleteable(entity).ExecuteCommandAsync() > 0);
+            throw new NotImplementedException();
+            // return (Task<bool>)SqlSugarExtAsync(async (db) => await db.Deleteable(entity).ExecuteCommandAsync() > 0);
         }
 
         public Task<bool> DeleteAsync(Expression<Func<T, bool>> where)
         {
-            return (Task<bool>)SqlSugarExt(async (db) => await db.Deleteable(where).ExecuteCommandAsync() > 0);
+            throw new NotImplementedException();
+            //return (Task<bool>)SqlSugarExtAsync(async (db) => await db.Deleteable(where).ExecuteCommandAsync() > 0);
         }
 
         public bool DeleteById(TKey id)
@@ -523,9 +525,10 @@ namespace Aju.Carefree.Repositories
             return (bool)SqlSugarExt((db) => db.Deleteable<T>().In(ids).ExecuteCommand());
         }
 
-        public Task<bool> DeleteByIdsAsync(object[] ids)
+        public async Task<bool> DeleteByIdsAsync(object[] ids)
         {
-            return (Task<bool>)SqlSugarExt((db) => db.Deleteable<T>().In(ids).ExecuteCommandAsync());
+            throw new NotImplementedException();
+            // return await (Task<bool>)SqlSugarExtAsync(async (db) => await db.Deleteable<T>().In(ids).ExecuteCommandAsync());
         }
 
         public IEnumerable<T> FindAll()
@@ -533,9 +536,9 @@ namespace Aju.Carefree.Repositories
             return (IEnumerable<T>)SqlSugarExt((db) => db.Queryable<T>().ToList());
         }
 
-        public Task<IEnumerable<T>> FindAllAsync()
+        public async Task<IEnumerable<T>> FindAllAsync()
         {
-            return (Task<IEnumerable<T>>)SqlSugarExt((db) => db.Queryable<T>().ToListAsync());
+            return (IEnumerable<T>)await SqlSugarExtAsync(async (db) => await db.Queryable<T>().ToListAsync());
         }
 
         public T FindByClause(Expression<Func<T, bool>> predicate)
@@ -615,13 +618,14 @@ namespace Aju.Carefree.Repositories
 
         public Task<IEnumerable<T>> FindListByClauseAsync(Expression<Func<T, bool>> where = null, Expression<Func<T, bool>> order = null)
         {
-            return (Task<IEnumerable<T>>)SqlSugarExt(async (db) =>
-             {
-                 var query = await db.Queryable<T>().Where(where).ToListAsync();
-                 if (order != null)
-                     return query.AsQueryable().OrderBy(order);
-                 return query;
-             });
+            throw new NotImplementedException();
+            //return (Task<IEnumerable<T>>)SqlSugarExtAsync(async (db) =>
+            // {
+            //     var query = await db.Queryable<T>().Where(where).ToListAsync();
+            //     if (order != null)
+            //         return query.AsQueryable().OrderBy(order);
+            //     return query;
+            // });
         }
 
         public IEnumerable<T> FindListBySql(string sql, object dynamic)

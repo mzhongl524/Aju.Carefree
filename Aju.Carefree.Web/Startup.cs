@@ -30,7 +30,13 @@ namespace Aju.Carefree.Web
             //    options.CheckConsentNeeded = context => true;
             //    options.MinimumSameSitePolicy = SameSiteMode.None;
             //});
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options =>
+            {
+                options.CacheProfiles.Add("default", new CacheProfile
+                {
+                    Duration = 600
+                });
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             //添加分布式缓存
             services.AddSingleton(typeof(ICacheService), new RedisCacheService(new Microsoft.Extensions.Caching.Redis.RedisCacheOptions
             {

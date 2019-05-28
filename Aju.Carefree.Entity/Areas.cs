@@ -12,5 +12,10 @@ namespace Aju.Carefree.Entity
         public string ParentCode { get; set; }
 
         public int Level { get; set; }
+
+        //public static implicit operator AreasDto(Areas areas)
+        //{
+        //    return areas.MapTo<AreasDto>();
+        //}
     }
 }

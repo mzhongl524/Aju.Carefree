@@ -1,21 +1,32 @@
-﻿using Aju.Carefree.IRepositories;
-using Aju.Carefree.IServices;
-using Aju.Carefree.Entity;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Aju.Carefree.Entity;
+using Aju.Carefree.IRepositories;
+using Aju.Carefree.IServices;
 
 namespace Aju.Carefree.Services
 {
-    public class AreaSqlSugarService : IAreaService
+    public class AreaService : IAreaService
     {
-        private readonly IAreaRepository _repository;
-        public AreaSqlSugarService(IAreaRepository repository)
+        //  private readonly RepositroyBase repositroy;
+        private readonly IBaseRepositroy<Areas, string> _repositroy;
+        //private readonly IAreaRepository _repository;
+        //public AreaService(IAreaRepository repository)
+        //{
+        //    _repository = repository;
+        //}
+        public AreaService(IBaseRepositroy<Areas, string> repositroy)
         {
-            _repository = repository;
+            _repositroy = repositroy;
         }
-
         public Areas FindToPK(string id)
         {
-            return _repository.FindById(id);
+            return _repositroy.FindById(id);
+        }
+
+        public Task<IEnumerable<Areas>> List()
+        {
+            return _repositroy.FindAllAsync();
         }
     }
 }

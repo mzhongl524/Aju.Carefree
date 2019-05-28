@@ -4,6 +4,8 @@ using Aju.Carefree.Dto;
 using Aju.Carefree.Entity;
 using Aju.Carefree.IServices;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Aju.Carefree.Web.Controllers
 {
@@ -12,12 +14,24 @@ namespace Aju.Carefree.Web.Controllers
         private readonly IAreaService _areaService;
         public DemoController(IAreaService areaService) => _areaService = areaService;
 
+        //读取数据
         public IActionResult DbIndex()
         {
             var model = _areaService.FindToPK("110000000000");
             return Content(model?.Name);
         }
 
+        //public async Task<IActionResult> DbIndex2()
+        //{
+        //    var model = await _areaService.List();
+        //    string str = "";
+        //    foreach (var item in model.Take(10))
+        //    {
+        //        str += item.Name + "|";
+        //    }
+        //    return Content(str);
+        //}
+        //测试 AutoMapper
         public IActionResult AutoMapperIndex()
         {
             var model = new Areas { Code = "1", ParentCode = "0", Level = 1, Name = "1", Remark = "1" };

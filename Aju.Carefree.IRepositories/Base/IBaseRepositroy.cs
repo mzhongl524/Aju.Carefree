@@ -195,6 +195,5 @@ namespace Aju.Carefree.IRepositories
         /// <returns></returns>
         Task<int> InsertAsync(List<T> t);
         #endregion
-
     }
 }

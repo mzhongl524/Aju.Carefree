@@ -1,8 +1,9 @@
 ﻿using Aju.Carefree.Entity;
+using Aju.Carefree.IRepositories.Dapper;
 
 namespace Aju.Carefree.IRepositories
 {
-    public interface IAreaRepository : ISqlSugarRepository<Areas, string>
+    public interface IAreaRepository : IBaseRepositroy<Areas, string>
     {
 
     }

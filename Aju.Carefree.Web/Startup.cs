@@ -79,7 +79,7 @@ namespace Aju.Carefree.Web
             app.UseStaticFiles();
             //  app.UseCookiePolicy();
 
-            Mappings.RegisterMappings();
+            //  Mappings.RegisterMappings();
 
             app.UseMvc(routes =>
             {

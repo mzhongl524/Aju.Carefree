@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Aju.Carefree.IRepositories
+namespace Aju.Carefree.IRepositories.SqlSugar
 {
     /// <summary>
     /// 仓储通用接口类

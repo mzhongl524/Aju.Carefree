@@ -1,6 +1,7 @@
 ﻿using Aju.Carefree.Common.DataBaseCore;
 using Aju.Carefree.Common.Model;
 using Aju.Carefree.IRepositories;
+using Aju.Carefree.IRepositories.SqlSugar;
 using SqlSugar;
 using System;
 using System.Collections.Generic;

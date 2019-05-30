@@ -8,13 +8,7 @@ namespace Aju.Carefree.Services
 {
     public class AreaService : IAreaService
     {
-        //  private readonly RepositroyBase repositroy;
         private readonly IBaseRepositroy<Areas, string> _repositroy;
-        //private readonly IAreaRepository _repository;
-        //public AreaService(IAreaRepository repository)
-        //{
-        //    _repository = repository;
-        //}
         public AreaService(IBaseRepositroy<Areas, string> repositroy)
         {
             _repositroy = repositroy;

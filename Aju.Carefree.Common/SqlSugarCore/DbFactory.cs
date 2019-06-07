@@ -21,4 +21,11 @@ namespace Aju.Carefree.Common.DataBaseCore
             return db;
         }
     }
+
+    public class DbOption
+    {
+        public string ConnectionString { get; set; }
+
+        public string DbType { get; set; }
+    }
 }

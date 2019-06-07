@@ -1,7 +1,6 @@
 ﻿using Aju.Carefree.Common.DataBaseCore;
 using Aju.Carefree.Common.Model;
 using Aju.Carefree.IRepositories;
-using Aju.Carefree.IRepositories.SqlSugar;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -15,17 +14,13 @@ namespace Aju.Carefree.Repositories.SqlSugar
     /// GenericRepositoryBase
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class GenericSqlSugarRepositoryBase<T, TKey> : ISqlSugarRepository<T, TKey> where T : class, new()
+    public class GenericSqlSugarRepositoryBase<T, TKey> : ISqlSugarRepository<T, TKey> where T : class, new()
     {
-        private string _ConnStr { get; set; }
-        public GenericSqlSugarRepositoryBase(string connStr)
-        {
-            this._ConnStr = connStr;
-        }
+        protected DbOption _dbOption;
 
         private object SqlSugarExt(Func<SqlSugarClient, object> func)
         {
-            using (var db = DbFactory.DB(_ConnStr))
+            using (var db = DbFactory.DB(_dbOption.ConnectionString))
             {
                 return func.Invoke(db);
             }
@@ -33,12 +28,13 @@ namespace Aju.Carefree.Repositories.SqlSugar
 
         private async Task<object> SqlSugarExtAsync(Func<SqlSugarClient, Task<object>> func)
         {
-            using (var db = DbFactory.DB(_ConnStr))
+            using (var db = DbFactory.DB(_dbOption.ConnectionString))
             {
                 return await func.Invoke(db);
             }
         }
 
+        #region OLD
         //#region Sync
         ///// <summary>
         ///// 根据主键查询
@@ -487,7 +483,8 @@ namespace Aju.Carefree.Repositories.SqlSugar
         //}
 
 
-        //#endregion
+        //#endregion 
+        #endregion
 
         public bool Delete(T entity)
         {
@@ -557,9 +554,9 @@ namespace Aju.Carefree.Repositories.SqlSugar
             return (T)SqlSugarExt((db) => db.Queryable<T>().InSingle(pkId));
         }
 
-        public Task<T> FindByIdAsync(TKey pkId)
+        public async Task<T> FindByIdAsync(TKey pkId)
         {
-            throw new NotImplementedException();
+            return (T)await SqlSugarExtAsync(async (db) => await db.Queryable<T>().InSingleAsync(pkId));
         }
 
         public List<T> FindList(Expression<Func<T, bool>> predicate, Pagination pagination)

@@ -15,9 +15,9 @@ namespace Aju.Carefree.Web.Controllers
         public DemoController(IAreaService areaService) => _areaService = areaService;
 
         //读取数据
-        public IActionResult DbIndex()
+        public async Task<IActionResult> DbIndex()
         {
-            var model = _areaService.FindToPK("110000000000");
+            var model = await _areaService.FindToPK("110000000000");
             return Content(model?.Name);
         }
 

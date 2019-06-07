@@ -1,22 +1,30 @@
-﻿using Aju.Carefree.AutoMapperConfig;
-using Aju.Carefree.Cache;
-using Aju.Carefree.Common;
+﻿using Aju.Carefree.Common;
+using Aju.Carefree.Common.DataBaseCore;
+using Aju.Carefree.Web.Filter;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Extensions.Logging;
+using NLog.Web;
 using System;
 using System.Reflection;
 namespace Aju.Carefree.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            env.ConfigureNLog("Nlog.config");
         }
 
         public IConfiguration Configuration { get; }
@@ -24,31 +32,45 @@ namespace Aju.Carefree.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            //services.Configure<CookiePolicyOptions>(options =>
-            //{
-            //    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-            //    options.CheckConsentNeeded = context => true;
-            //    options.MinimumSameSitePolicy = SameSiteMode.None;
-            //});
+            //数据库配置
+            services.Configure<DbOption>("Aju.Carefree", Configuration.GetSection("DbOption"));
+            //Cookie
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => false;
+                options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
+            });
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Account/Index";
+                    options.LogoutPath = "/Account/Logout";
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+                });
+            //Session
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(15);
+                options.Cookie.HttpOnly = true;
+            });
+            //CSRF
+            services.AddAntiforgery(options =>
+            {
+                options.FormFieldName = "AntiforgeryKey_Aju";
+                options.HeaderName = "X-CSRF-TOKEN-Aju";
+                options.SuppressXFrameOptionsHeader = false;
+            });
+            //mvc
             services.AddMvc(options =>
             {
-                options.CacheProfiles.Add("default", new CacheProfile
-                {
-                    Duration = 600
-                });
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            //添加分布式缓存
-            services.AddSingleton(typeof(ICacheService), new RedisCacheService(new Microsoft.Extensions.Caching.Redis.RedisCacheOptions
+                options.Filters.Add(new GlobalExceptionFilter());
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            .AddControllersAsServices()
+            .AddFluentValidation(fv =>
             {
-                Configuration = Configuration.GetSection("Cache:ConnectionCacheStr").Value,
-                InstanceName = Configuration.GetSection("Cache:CacheInstanceName").Value
-            }));
-
-            #region AutoMapper
-            //services
-            //services.AddAutoMapper();
-            #endregion
-
+                //去掉其他的验证，只使用FluentValidation的验证规则
+                fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+            });
             #region Autofac
             var builder = new ContainerBuilder();//实例化 AutoFac  容器    
 
@@ -71,7 +93,7 @@ namespace Aju.Carefree.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -83,10 +105,11 @@ namespace Aju.Carefree.Web
             }
 
             app.UseStaticFiles();
-            //  app.UseCookiePolicy();
-
-            //  Mappings.RegisterMappings();
-
+            app.UseCookiePolicy();
+            app.UseSession();
+            app.UseAuthentication();
+            //add NLog to ASP.NET Core
+            loggerFactory.AddNLog();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

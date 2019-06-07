@@ -7,9 +7,9 @@ namespace Aju.Carefree.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ICacheService _cacheService;
+        //private readonly ICacheService _cacheService;
 
-        public HomeController(ICacheService cacheService) => _cacheService = cacheService;
+        //public HomeController(ICacheService cacheService) => _cacheService = cacheService;
 
         public IActionResult Index()
         {

@@ -6,7 +6,7 @@ namespace Aju.Carefree.IServices
 {
     public interface IAreaService : IService<Areas, string>
     {
-        Areas FindToPK(string id);
+        Task<Areas> FindToPK(string id);
 
         Task<IEnumerable<Areas>> List();
     }

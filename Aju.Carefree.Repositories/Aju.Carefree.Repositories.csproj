@@ -5,13 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper.SimpleCRUD" Version="2.1.0" />
-    <PackageReference Include="sqlSugarCore" Version="4.9.9.10" />
+    <PackageReference Include="sqlSugarCore" Version="5.0.0.6" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Aju.Carefree.Common\Aju.Carefree.Common.csproj" />
     <ProjectReference Include="..\Aju.Carefree.IRepositories\Aju.Carefree.IRepositories.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.Extensions.Options">
+      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.options\2.2.0\lib\netstandard2.0\Microsoft.Extensions.Options.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

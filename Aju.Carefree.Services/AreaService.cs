@@ -8,14 +8,14 @@ namespace Aju.Carefree.Services
 {
     public class AreaService : IAreaService
     {
-        private readonly IBaseRepositroy<Areas, string> _repositroy;
-        public AreaService(IBaseRepositroy<Areas, string> repositroy)
+        private readonly IAreaRepository _repositroy;
+        public AreaService(IAreaRepository repositroy)
         {
             _repositroy = repositroy;
         }
-        public Areas FindToPK(string id)
+        public async Task<Areas> FindToPK(string id)
         {
-            return _repositroy.FindById(id);
+            return await _repositroy.FindByIdAsync(id);
         }
 
         public Task<IEnumerable<Areas>> List()

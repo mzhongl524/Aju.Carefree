@@ -30,7 +30,7 @@
 ##  NLog            : https://nlog-project.org/
 ##  Elasticsearch.Net  ：https://www.elastic.co/guide/en/elasticsearch/client/net-api/current/index.html
 ##  Elasticsearch.Net（GitHub） ：https://github.com/elastic/elasticsearch-net
-
+##  MiniProfiler   ： https://miniprofiler.com/
 
 # 本人运营二维码，用于分享DotNet知识!
 ![Image text](https://img2018.cnblogs.com/blog/562098/201905/562098-20190509204404888-1196452045.png)

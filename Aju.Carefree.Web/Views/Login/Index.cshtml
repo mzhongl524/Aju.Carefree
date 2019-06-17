@@ -30,7 +30,7 @@
             <input name="password" lay-verify="required" placeholder="密码" type="password" class="layui-input">
             <hr class="hr15">
             <input name="code" lay-verify="required" placeholder="验证码" type="text" class="layui-input" style="width:60%;float:left">
-            <label>图片验证码</label>
+            <img src="@Url.Action("GetCaptchaImage", "Account")" id="CaptchaCodeImg" style="width:38%;float:right;height:50px;">
             <hr class="hr15">
             <input value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
             <hr class="hr20">

@@ -71,6 +71,15 @@ namespace Aju.Carefree.Web
                 //去掉其他的验证，只使用FluentValidation的验证规则
                 fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
             });
+            //AddMiniProfiler
+            services.AddMiniProfiler(options =>
+            {
+                //设定弹出窗口的位置是左下角
+                options.PopupRenderPosition = StackExchange.Profiling.RenderPosition.BottomLeft;
+                //在弹出的明细窗口里会显式Time With Children这列。
+                options.PopupShowTimeWithChildren = true;
+            });
+
             #region Autofac
             var builder = new ContainerBuilder();//实例化 AutoFac  容器    
 
@@ -110,6 +119,9 @@ namespace Aju.Carefree.Web
             app.UseAuthentication();
             //add NLog to ASP.NET Core
             loggerFactory.AddNLog();
+
+            app.UseMiniProfiler();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

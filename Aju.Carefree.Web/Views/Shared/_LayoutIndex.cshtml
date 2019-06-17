@@ -17,9 +17,17 @@
     <![endif]-->
     @RenderSection("head", false)
 </head>
-<body>
+<body class="index">
     @RenderBody()
 
+
+    <mini-profiler />
+    <script src="~/lib/layui/layui.js"></script>
+    <script src="~/js/xadmin.js"></script>
     @RenderSection("Scripts", false)
 </body>
 </html>
+<script>
+    //  是否开启刷新记忆tab功能
+    var is_remember = true;
+</script>

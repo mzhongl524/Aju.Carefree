@@ -1,9 +1,11 @@
 ﻿using Aju.Carefree.AutoMapperConfig;
 using Aju.Carefree.Common;
 using Aju.Carefree.Dto;
+using Aju.Carefree.Dto.ViewModel;
 using Aju.Carefree.Entity;
 using Aju.Carefree.IServices;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Aju.Carefree.Web.Controllers
@@ -20,16 +22,31 @@ namespace Aju.Carefree.Web.Controllers
             return Content(model?.Name);
         }
 
-        //public async Task<IActionResult> DbIndex2()
-        //{
-        //    var model = await _areaService.List();
-        //    string str = "";
-        //    foreach (var item in model.Take(10))
-        //    {
-        //        str += item.Name + "|";
-        //    }
-        //    return Content(str);
-        //}
+        public IActionResult TableIndex()
+        {
+            return View();
+        }
+
+        public string GetData()
+        {
+            var list = new List<ViewModel>();
+            for (int i = 1; i < 100; i++)
+            {
+                list.Add(new ViewModel
+                {
+                    id = i.ToString(),
+                    city = "兰州",
+                    score = "10",
+                    sex = "男",
+                    sign = "Prince",
+                    classify = "100",
+                    experience = "1233",
+                    wealth = "1111",
+                    username = "Aju"
+                });
+            }
+            return JsonHelper.Instance.Serialize(new TableDataModel { count = 99, data = list });
+        }
         //测试 AutoMapper
         public IActionResult AutoMapperIndex()
         {
@@ -37,5 +54,19 @@ namespace Aju.Carefree.Web.Controllers
             var mapper = AutoMapperExt.MapTo<AreasDto>(model);
             return Content(JsonHelper.Instance.Serialize(mapper));
         }
+    }
+
+    public class ViewModel
+    {
+        public string id { get; set; }
+        public string username { get; set; }
+
+        public string sex { get; set; }
+        public string city { get; set; }
+        public string sign { get; set; }
+        public string experience { get; set; }
+        public string score { get; set; }
+        public string classify { get; set; }
+        public string wealth { get; set; }
     }
 }

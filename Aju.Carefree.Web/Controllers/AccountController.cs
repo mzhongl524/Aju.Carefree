@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Aju.Carefree.Common;
+﻿using Aju.Carefree.Common;
 using Aju.Carefree.Common.ImageVerificationHelper;
 using Aju.Carefree.Dto.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
 
 namespace Aju.Carefree.Web.Controllers
 {
@@ -21,8 +17,9 @@ namespace Aju.Carefree.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public string Login()
+        public string Login(LoginViewModel viewModel)
         {
+            //
             BaseResult result = new BaseResult();
             return JsonHelper.Instance.Serialize(result);
         }
@@ -34,5 +31,12 @@ namespace Aju.Carefree.Web.Controllers
             HttpContext.Session.SetString(CaptchaCodeSessionName, captchaCode);
             return new FileStreamResult(new MemoryStream(result.CaptchaByteData), "image/png");
         }
+    }
+
+    public class LoginViewModel
+    {
+        public string username { get; set; }
+        public string password { get; set; }
+        public string code { get; set; }
     }
 }

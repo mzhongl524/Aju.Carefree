@@ -25,11 +25,11 @@
 
         <form method="post" class="layui-form">
             @Html.AntiForgeryToken()
-            <input name="username" placeholder="用户名" type="text" lay-verify="required" class="layui-input">
+            <input name="username" placeholder="用户名" type="text" lay-verify="userName" class="layui-input">
             <hr class="hr15">
-            <input name="password" lay-verify="required" placeholder="密码" type="password" class="layui-input">
+            <input name="password" lay-verify="password" placeholder="密码" type="password" class="layui-input">
             <hr class="hr15">
-            <input name="code" lay-verify="required" placeholder="验证码" type="text" class="layui-input" style="width:60%;float:left">
+            <input name="captchaCode" lay-verify="captchaCode" placeholder="验证码" type="text" class="layui-input" style="width:60%;float:left">
             <img src="@Url.Action("GetCaptchaImage", "Account")" id="CaptchaCodeImg" style="width:38%;float:right;height:50px;">
             <hr class="hr15">
             <input value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
@@ -41,28 +41,7 @@
             </div>
         </form>
     </div>
-    @*<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>*@
     <script src="~/lib/layui/layui.js" charset="utf-8"></script>
     <script src="~/js/login.js?_=@DateTime.Now.ToString("yyyyMMddHHmmss")"></script>
-    @*<script>
-            $(function ()
-            {
-                layui.use('form', function ()
-                {
-                    var form = layui.form;
-                    //监听提交
-                    form.on('submit(login)', function (data)
-                    {
-                        location.href = '/Home/Index'
-                        //alert(JSON.stringify(data.field));
-                        //layer.msg(JSON.stringify(data.field), function ()
-                        //{
-                        //    location.href = '/Home/Index'
-                        //});
-                        return false;
-                    });
-                });
-            })
-        </script>*@
 </body>
 </html>

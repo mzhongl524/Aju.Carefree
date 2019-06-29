@@ -39,7 +39,10 @@
     });
     form.verify({
         userName: function (value, item)
-        { //value：表单的值、item：表单的DOM对象
+        {  //value：表单的值、item：表单的DOM对象
+            if (value.length <= 0) {
+                return '登录名不能为空';
+            }
             if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
                 return '登录名不能有特殊字符';
             }
@@ -53,8 +56,23 @@
                 return '登录名长度必须符合规则';
             }
         },
+        password: function (value, item)
+        { //value：表单的值、item：表单的DOM对象
+            if (value.length <= 0) {
+                return '密码不能为空';
+            }
+            if (/(^\_)|(\__)|(\_+$)/.test(value)) {
+                return '密码首尾不能出现下划线\'_\'';
+            }
+            if (value.length > 32 || value.length < 4) {
+                return '密码长度必须符合规则';
+            }
+        },
         captchaCode: function (value, item)
         { //value：表单的值、item：表单的DOM对象
+            if (value.length <= 0) {
+                return '验证码不能为空';
+            }
             if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
                 return '验证码不能有特殊字符';
             }
@@ -64,25 +82,13 @@
             if (value.length !== 4) {
                 return '验证码长度必须符合规则';
             }
-        },
-        password: function (value, item)
-        { //value：表单的值、item：表单的DOM对象
-            if (/(^\_)|(\__)|(\_+$)/.test(value)) {
-                return '密码首尾不能出现下划线\'_\'';
-            }
-            if (value.length > 32 || value.length < 4) {
-                return '验证码长度必须符合规则';
-            }
         }
     });
-
     $("#CaptchaCodeImg").click(function ()
     {
         d = new Date();
         $("#CaptchaCodeImg").attr("src", "/Account/GetCaptchaImage?" + d.getTime());
     });
-
-
     //表单输入效果
     $(".input-item").click(function (e)
     {

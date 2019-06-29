@@ -1,0 +1,113 @@
+﻿@{
+    Layout = "_TabLayoutIndex";
+    ViewBag.Title = "Index";
+}
+<div class="x-nav">
+    <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">演示</a>
+        <a>
+            <cite>导航元素</cite>
+        </a>
+    </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
+        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
+    </a>
+</div>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <form class="layui-form layui-col-space5">
+                        <div class="layui-inline layui-show-xs-block">
+                            <input class="layui-input" autocomplete="off" placeholder="开始日" name="start" id="start">
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <input class="layui-input" autocomplete="off" placeholder="截止日" name="end" id="end">
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <button class="layui-btn search_btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+                        </div>
+                    </form>
+                </div>
+                <div class="layui-card-header">
+                    <button class="layui-btn layui-btn-danger"><i class="layui-icon">&#xe61f;</i>添加</button>
+                </div>
+                <div class="layui-card-body ">
+                    <table id="table" lay-filter="test"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--操作-->
+<script type="text/html" id="listBar">
+    <a class="layui-btn layui-btn-xs" lay-event="edit"><i class="layui-icon">&#xe642;</i>编辑</a>
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><i class="layui-icon">&#xe640;</i>删除</a>
+</script>
+@section Scripts{
+<script>
+    layui.use('table', function ()
+    {
+        var table = layui.table, $ = layui.jquery;
+        //初始化加载数据
+        table.render({
+            elem: '#table',
+            height: 312,
+            cellMinWidth: 95,
+            url: '/Demo/GetData', //数据接口
+            page: true,  //开启分页
+            id: "listTable",
+            cols: [[ //表头
+                { field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left' },
+                { field: 'username', title: '用户名', width: 80 },
+                { field: 'sex', title: '性别', width: 80, sort: true },
+                { field: 'city', title: '城市', width: 80 },
+                { field: 'sign', title: '签名', width: 177 },
+                { field: 'experience', title: '积分', width: 80, sort: true },
+                { field: 'score', title: '评分', width: 80, sort: true },
+                { field: 'classify', title: '职业', width: 80 },
+                { field: 'wealth', title: '财富', width: 135, sort: true },
+                { title: '操作', minWidth: 80, templet: '#listBar', fixed: "right", align: "center" }
+            ]]
+        });
+
+        //搜索
+        $(".search_btn").on("click", function ()
+        {
+            table.reload("listTable", {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+                where: {
+                    //key: $(".searchVal").val()  //搜索的关键字
+                }
+            });
+        });
+        //列表操作
+        //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+        //var data = obj.data; //获得当前行数据
+        //var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+        //var tr = obj.tr; //获得当前行 tr 的DOM对象
+        table.on('tool(test)', function (obj)
+        {
+            var layEvent = obj.event,
+                data = obj.data;
+
+            if (layEvent === 'edit') { //编辑
+                alert(data.id);
+            } else if (layEvent === 'del') { //删除
+                //layer.confirm('确定删除吗？', { icon: 3, title: '提示信息' }, function (index)
+                //{
+
+                //   // alert("s");
+                //});
+            }
+        });
+    });
+</script>
+}

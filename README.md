@@ -1,6 +1,6 @@
 # Aju.Carefree
-从零开始学习 【.Net Core2.2 Mvc|Api + SqlSugar + Autofac+ AutoMapper+Redis+Swagger...】
-
+后端使用.Net Core 2.2 + Redis + SqlSugar + Autofac + AutoMapper + .....堆起来的后台框架<br/>
+页面布局使用 X-Admin、layer
 ## 运行前说明
 1、下载到本地后，重新生成下解决方案<br/>
 2、将Aju.Carefree.GenerateDatabase 控制台设为启动项<br/>
@@ -34,11 +34,6 @@
 
 # 本人运营二维码，用于分享DotNet知识!
 ![Image text](https://img2018.cnblogs.com/blog/562098/201905/562098-20190509204404888-1196452045.png)
-
-# 任务列表
-- [x] Finish my changes
-- [ ] Push my commits to GitHub
-- [ ] Open a pull request
 
 
 #好多都在使用各种ORM，但不了解ORM的底层实现，以至于出现问题时一脸懵逼

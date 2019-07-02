@@ -36,9 +36,9 @@
 ![Image text](https://img2018.cnblogs.com/blog/562098/201905/562098-20190509204404888-1196452045.png)
 
 # 任务列表
- [ √ ]框架搭建
- [ √ ]x-admin、layui
- [ × ]RBAC权限
+- [x] Finish my changes
+- [ ] Push my commits to GitHub
+- [ ] Open a pull request
 
 
 #好多都在使用各种ORM，但不了解ORM的底层实现，以至于出现问题时一脸懵逼

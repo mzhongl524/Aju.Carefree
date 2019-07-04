@@ -35,7 +35,7 @@
                     </form>
                 </div>
                 <div class="layui-card-header">
-                    <button class="layui-btn layui-btn-danger"><i class="layui-icon">&#xe61f;</i>添加</button>
+                    <button class="layui-btn layui-btn-danger" onclick="btn_add()"><i class="layui-icon">&#xe61f;</i>添加</button>
                 </div>
                 <div class="layui-card-body ">
                     <table id="table" lay-filter="test"></table>
@@ -50,6 +50,7 @@
     <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><i class="layui-icon">&#xe640;</i>删除</a>
 </script>
 @section Scripts{
+<script src="~/js/layuiIndex.js"></script>
 <script>
     layui.use('table', function ()
     {
@@ -59,7 +60,7 @@
             elem: '#table',
             height: 312,
             cellMinWidth: 95,
-            url: '/Demo/GetData', //数据接口
+            url: '/Demo/GetTableData', //数据接口
             page: true,  //开启分页
             id: "listTable",
             cols: [[ //表头
@@ -109,5 +110,19 @@
             }
         });
     });
+    function btn_add()
+    {
+        modalOpen({
+            id: "Form",
+            title: "测试layer",
+            url: "/Demo/TreeIndex",
+            width: "650px",
+            height: "480px",
+            callBack: function (iframeId, index)
+            {
+                // top.frames[iframeId].submitForm(index);
+            }
+        });
+    }
 </script>
 }

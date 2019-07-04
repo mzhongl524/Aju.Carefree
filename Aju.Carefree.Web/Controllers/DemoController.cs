@@ -6,6 +6,7 @@ using Aju.Carefree.Entity;
 using Aju.Carefree.IServices;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Aju.Carefree.Web.Controllers
@@ -13,7 +14,26 @@ namespace Aju.Carefree.Web.Controllers
     public class DemoController : Controller
     {
         private readonly IAreaService _areaService;
-        public DemoController(IAreaService areaService) => _areaService = areaService;
+        private List<ViewModel> _list = new List<ViewModel>();
+        public DemoController(IAreaService areaService)
+        {
+            _areaService = areaService;
+            for (int i = 1; i < 100; i++)
+            {
+                _list.Add(new ViewModel
+                {
+                    id = i.ToString(),
+                    city = "兰州",
+                    score = "10",
+                    sex = "男",
+                    sign = "Prince",
+                    classify = "100",
+                    experience = "1233",
+                    wealth = "1111",
+                    username = "Aju"
+                });
+            }
+        }
 
         //读取数据
         public async Task<IActionResult> DbIndex()
@@ -27,26 +47,68 @@ namespace Aju.Carefree.Web.Controllers
             return View();
         }
 
-        public string GetData()
+
+        public string GetTableData(int page = 1, int limit = 10)
         {
-            var list = new List<ViewModel>();
-            for (int i = 1; i < 100; i++)
-            {
-                list.Add(new ViewModel
-                {
-                    id = i.ToString(),
-                    city = "兰州",
-                    score = "10",
-                    sex = "男",
-                    sign = "Prince",
-                    classify = "100",
-                    experience = "1233",
-                    wealth = "1111",
-                    username = "Aju"
-                });
-            }
-            return JsonHelper.Instance.Serialize(new TableDataModel { count = 99, data = list });
+            page = page - 1;
+            var list = _list.Skip(page * limit).Take(limit);
+            return JsonHelper.Instance.Serialize(new TableDataModel { count = _list.Count(), data = list });
         }
+
+        #region Authtree数据
+        public IActionResult TreeIndex()
+        {
+            return View();
+        }
+
+        public string GetTreeData()
+        {
+            var list = new List<AuthTreeViewModelList>();
+            list.Add(new AuthTreeViewModelList
+            {
+                @checked = true,
+                name = "用户管理",
+                value = "xsgl",
+                list = new List<AuthTreeViewModelList>
+                {
+                    new AuthTreeViewModelList{ @checked=true,name="用户组",value="xsgl-basic",
+                        list =new List<AuthTreeViewModelList>{
+                            new AuthTreeViewModelList{ name="本站用户",value="xsgl-basic-xsxm",@checked=true,
+                                list =new List<AuthTreeViewModelList>{
+                                    new AuthTreeViewModelList{name="用户列表",value="xsgl-basic-xsxm-readonly",@checked=true},
+                                    new AuthTreeViewModelList{name="新增用户",value="xsgl-basic-xsxm-editable",@checked=false}
+                                } }
+                        } },
+                    new AuthTreeViewModelList{ name="第三方用户",value="xsgl-basic-xsxm",@checked=true,
+                        list =new List<AuthTreeViewModelList>{
+                             new AuthTreeViewModelList{name="用户列表",value="xsgl-basic-xsxm-readonly",@checked=false}
+                        }
+                    }
+                }
+            });
+            list.Add(new AuthTreeViewModelList
+            {
+                @checked = true,
+                name = "用户组管理",
+                value = "sbgl",
+                list = new List<AuthTreeViewModelList>
+                {
+                     new AuthTreeViewModelList{ @checked=true,name="角色管理",value="sbgl-sbsjlb",
+                         list =new List<AuthTreeViewModelList>{
+                              new AuthTreeViewModelList{name="添加角色",value="sbgl-sbsjlb-dj",@checked=true},
+                               new AuthTreeViewModelList{name="角色列表",value="sbgl-sbsjlb-yl",@checked=false}
+                     } },
+                     new AuthTreeViewModelList{ @checked=true,name="管理员管理",value="sbgl-sbsjlb",
+                         list =new List<AuthTreeViewModelList>{
+                              new AuthTreeViewModelList{name="添加管理员",value="sbgl-sbsjlb-dj",@checked=true},
+                               new AuthTreeViewModelList{name="管理员列表",value="sbgl-sbsjlb-yl",@checked=false}
+                     } }
+                }
+            });
+            return JsonHelper.Instance.Serialize(new AuthTreeViewModel { data = new AuthTreeViewModelExt { trees = list } });
+        }
+        #endregion
+
         //测试 AutoMapper
         public IActionResult AutoMapperIndex()
         {

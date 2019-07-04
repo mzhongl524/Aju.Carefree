@@ -1,6 +1,6 @@
 # Aju.Carefree
 后端使用.Net Core 2.2 + Redis + SqlSugar + Autofac + AutoMapper + .....堆起来的后台框架<br/>
-页面布局使用 X-Admin、layer
+页面布局使用 X-Admin、layui
 
 ## 开源说明
  1、采用.Net Core 2.2 框架进行搭建 <br/>

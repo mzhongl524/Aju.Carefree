@@ -21,9 +21,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Aju.Carefree.AutoMapperConfig\Aju.Carefree.AutoMapperConfig.csproj" />
-    <ProjectReference Include="..\Aju.Carefree.Cache\Aju.Carefree.Cache.csproj" />
     <ProjectReference Include="..\Aju.Carefree.Common\Aju.Carefree.Common.csproj" />
     <ProjectReference Include="..\Aju.Carefree.IServices\Aju.Carefree.IServices.csproj" />
+    <ProjectReference Include="..\Aju.Carefree.NetCore\Aju.Carefree.NetCore.csproj" />
     <ProjectReference Include="..\Aju.Carefree.Repositories\Aju.Carefree.Repositories.csproj" />
     <ProjectReference Include="..\Aju.Carefree.Services\Aju.Carefree.Services.csproj" />
   </ItemGroup>

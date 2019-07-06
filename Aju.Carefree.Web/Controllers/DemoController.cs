@@ -15,9 +15,13 @@ namespace Aju.Carefree.Web.Controllers
     {
         private readonly IAreaService _areaService;
         private List<ViewModel> _list = new List<ViewModel>();
+
+        //private readonly ICacheService _cache;
+
         public DemoController(IAreaService areaService)
         {
             _areaService = areaService;
+            //_cache = cache;
             for (int i = 1; i < 100; i++)
             {
                 _list.Add(new ViewModel
@@ -34,6 +38,13 @@ namespace Aju.Carefree.Web.Controllers
                 });
             }
         }
+
+        //public async Task<IActionResult> Index()
+        //{
+        //    //await _cache.SetStringAsync("123", "321");
+        //    //var s = await _cache.GetStringAsync("123");
+        //    return Content(s);
+        //}
 
         //读取数据
         public async Task<IActionResult> DbIndex()

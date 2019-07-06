@@ -1,15 +1,10 @@
-﻿using Aju.Carefree.Cache;
-using Aju.Carefree.Web.Models;
+﻿using Aju.Carefree.NetCore.Attributes;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace Aju.Carefree.Web.Controllers
 {
     public class HomeController : Controller
     {
-        //private readonly ICacheService _cacheService;
-
-        //public HomeController(ICacheService cacheService) => _cacheService = cacheService;
 
         public IActionResult Index()
         {
@@ -19,6 +14,20 @@ namespace Aju.Carefree.Web.Controllers
         public IActionResult Main()
         {
             return View();
+        }
+
+        [RedisCache(CacheKey = "Aju")]
+        public virtual string RedisIndex()
+        {
+            var s1 = "1213243214";
+            var s = _GetStr();
+            return s1;
+        }
+
+
+        private string _GetStr()
+        {
+            return "13276";
         }
     }
 }

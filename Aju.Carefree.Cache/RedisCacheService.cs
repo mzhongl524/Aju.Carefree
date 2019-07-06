@@ -1,160 +1,323 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Caching.Redis;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using ServiceStack.Redis;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Aju.Carefree.Cache
 {
     public class RedisCacheService : ICacheService
     {
-        private readonly RedisCache _redisCache;
-        public RedisCacheService(RedisCacheOptions options) => _redisCache = new RedisCache(options);
-
-        #region 获取缓存 Get(string key)
-        /// <summary>
-        /// 获取缓存
-        /// </summary>
-        /// <param name="key">缓存key</param>
-        /// <returns></returns>
-        public string Get(string key)
+        private readonly IRedisClientsManager _redisManager;
+        private readonly ServiceStackRedisCacheOptions _options;
+        public RedisCacheService(IOptions<ServiceStackRedisCacheOptions> optionsAccessor)
         {
-            string returnStr = null;
-            if (string.IsNullOrEmpty(key)) return null;
-            if (Exists(key))
-                returnStr = Encoding.UTF8.GetString(_redisCache.Get(key));
-            return returnStr;
-
-        }
-        /// <summary>
-        /// 获取缓存
-        /// </summary>
-        /// <param name="key">缓存key</param>
-        /// <returns></returns>
-        public async Task<string> GetAsync(string key)
-        {
-            string returnString = null;
-            var value = await _redisCache.GetAsync(key);
-            if (value != null)
-                returnString = Encoding.UTF8.GetString(value);
-            return returnString;
-        }
-        public string GetString(string key)
-        {
-            if (!string.IsNullOrEmpty(key))
-                return _redisCache.GetString(key);
-            return null;
-        }
-
-        public async Task<string> GetStringAsync(string key)
-        {
-            if (!string.IsNullOrEmpty(key))
-                return await _redisCache.GetStringAsync(key);
-            return null;
-        }
-        #endregion
-
-        #region 添加缓存 Set
-        /// <summary>
-        /// 添加缓存
-        /// </summary>
-        /// <param name="key">缓存key</param>
-        /// <param name="value">缓存值</param>
-        /// <param name="expirationTime">绝对过期时间(分钟)</param>
-        public void Set(string key, string value, int expirationTime = 20)
-        {
-            if (!string.IsNullOrEmpty(key))
+            if (optionsAccessor == null)
             {
-                _redisCache.Set(key, Encoding.UTF8.GetBytes(value),
-                    new DistributedCacheEntryOptions
+                throw new ArgumentNullException(nameof(optionsAccessor));
+            }
+
+            _options = optionsAccessor.Value;
+
+            var host = $"{_options.Password}@{_options.Host}:{_options.Port}";
+            RedisConfig.VerifyMasterConnections = false;
+            _redisManager = new RedisManagerPool(host);
+        }
+
+        #region Base
+
+        public byte[] Get(string key)
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            using (var client = _redisManager.GetClient() as IRedisNativeClient)
+            {
+                if (client.Exists(key) == 1)
+                {
+                    return client.Get(key);
+                }
+            }
+            return null;
+        }
+
+        public async Task<byte[]> GetAsync(string key)
+        {
+            return Get(key);
+        }
+
+        public void Set(string key, byte[] value, DistributedCacheEntryOptions options)
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            using (var client = _redisManager.GetClient() as IRedisNativeClient)
+            {
+                var expireInSeconds = GetExpireInSeconds(options);
+                if (expireInSeconds > 0)
+                {
+                    client.SetEx(key, expireInSeconds, value);
+                    client.SetEx(GetExpirationKey(key), expireInSeconds, Encoding.UTF8.GetBytes(expireInSeconds.ToString()));
+                }
+                else
+                {
+                    client.Set(key, value);
+                }
+            }
+        }
+
+        public async Task SetAsync(string key, byte[] value, DistributedCacheEntryOptions options)
+        {
+            Set(key, value, options);
+        }
+
+        public void Refresh(string key)
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            using (var client = _redisManager.GetClient() as IRedisNativeClient)
+            {
+                if (client.Exists(key) == 1)
+                {
+                    var value = client.Get(key);
+                    if (value != null)
                     {
-                        //设置绝对过期时间
-                        AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(expirationTime)
-                        //设置滑动过期时间
-                        // SlidingExpiration=
-                    });
-                // _redisCache.Refresh(key);
+                        var expirationValue = client.Get(GetExpirationKey(key));
+                        if (expirationValue != null)
+                        {
+                            client.Expire(key, int.Parse(Encoding.UTF8.GetString(expirationValue)));
+                        }
+                    }
+                }
             }
         }
 
-        /// <summary>
-        /// 添加缓存
-        /// </summary>
-        /// <param name="key">缓存key</param>
-        /// <param name="value">缓存值</param>
-        /// <param name="expirationTime">绝对过期时间(分钟)</param>
-        public async Task SetAsync(string key, string value, int expirationTime = 20)
+        public async Task RefreshAsync(string key)
         {
-            if (!string.IsNullOrEmpty(key))
+            if (key == null)
             {
-                await _redisCache.SetAsync(key, Encoding.UTF8.GetBytes(value),
-                       new DistributedCacheEntryOptions
-                       {
-                           //设置绝对过期时间
-                           AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(expirationTime)
-                           //设置滑动过期时间
-                           // SlidingExpiration=
-                       });
-                // _redisCache.Refresh(key);
+                throw new ArgumentNullException(nameof(key));
             }
-        }
 
-        public void SetString(string key, string value)
-        {
-            _redisCache.SetString(key, value);
+            Refresh(key);
         }
-        public async Task SetStringAsync(string key, string value)
-        {
-            await _redisCache.SetStringAsync(key, value);
-        }
-
-        #endregion
-
-        #region 移除缓存 Remove
 
         public void Remove(string key)
         {
-            if (string.IsNullOrEmpty(key))
-                _redisCache.Remove(key);
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            using (var client = _redisManager.GetClient() as IRedisNativeClient)
+            {
+                client.Del(key);
+            }
         }
 
         public async Task RemoveAsync(string key)
         {
-            if (string.IsNullOrEmpty(key))
-                await _redisCache.RemoveAsync(key);
-        }
-
-        #endregion
-
-        #region 更新缓存 Modify
-        public void Modify(string key, string value, int expirationTime = 20)
-        {
-            if (string.IsNullOrEmpty(key)) return;
             Remove(key);
-            Set(key, value, expirationTime);
         }
 
-        public async Task ModifyAsync(string key, string value, int expirationTime = 20)
+        private int GetExpireInSeconds(DistributedCacheEntryOptions options)
         {
-            if (string.IsNullOrEmpty(key)) return;
-            await RemoveAsync(key);
-            await SetAsync(key, value, expirationTime);
+            if (options.SlidingExpiration.HasValue)
+            {
+                return (int)options.SlidingExpiration.Value.TotalSeconds;
+            }
+            else if (options.AbsoluteExpiration.HasValue)
+            {
+                return (int)options.AbsoluteExpirationRelativeToNow.Value.TotalSeconds;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        private string GetExpirationKey(string key)
+        {
+            return key + $"-{nameof(DistributedCacheEntryOptions)}";
+        }
+        #endregion
+        #region data
+        public T Get<T>(string id)
+        {
+            using (var redisClient = _redisManager.GetClient())
+            {
+                var redis = redisClient.As<T>();
+                return redis.GetById(id.ToLower());
+            }
+        }
+
+        public IQueryable<T> GetAll<T>()
+        {
+            using (var redisClient = _redisManager.GetClient())
+            {
+                var redis = redisClient.As<T>();
+                return redis.GetAll().AsQueryable();
+            }
+        }
+
+        public IQueryable<T> GetAll<T>(string hash, string value, Expression<Func<T, bool>> filter)
+        {
+            var filtered = _redisManager.GetClient().GetAllEntriesFromHash(hash).Where(c => c.Value.Equals(value, StringComparison.CurrentCultureIgnoreCase));
+            var ids = filtered.Select(c => c.Key);
+
+            var ret = _redisManager.GetClient().As<T>().GetByIds(ids).AsQueryable()
+                                .Where(filter);
+
+            return ret;
+        }
+
+        public IQueryable<T> GetAll<T>(string hash, string value)
+        {
+            var filtered = _redisManager.GetClient().GetAllEntriesFromHash(hash).Where(c => c.Value.Equals(value, StringComparison.CurrentCultureIgnoreCase));
+            var ids = filtered.Select(c => c.Key);
+
+            var ret = _redisManager.GetClient().As<T>().GetByIds(ids).AsQueryable();
+            return ret;
+        }
+
+        public void Set<T>(T item)
+        {
+            using (var redisClient = _redisManager.GetClient())
+            {
+                var redis = redisClient.As<T>();
+                redis.Store(item);
+            }
+        }
+
+        public void Set<T>(T item, string hash, string value, string keyName)
+        {
+            Type t = item.GetType();
+            PropertyInfo prop = t.GetProperty(keyName);
+
+            _redisManager.GetClient().SetEntryInHash(hash, prop.GetValue(item).ToString(), value.ToLower());
+
+            _redisManager.GetClient().As<T>().Store(item);
+        }
+
+        public void Set<T>(T item, List<string> hash, List<string> value, string keyName)
+        {
+            Type t = item.GetType();
+            PropertyInfo prop = t.GetProperty(keyName);
+
+            for (int i = 0; i < hash.Count; i++)
+            {
+                _redisManager.GetClient().SetEntryInHash(hash[i], prop.GetValue(item).ToString(), value[i].ToLower());
+            }
+
+            _redisManager.GetClient().As<T>().Store(item);
+        }
+
+        public void SetAll<T>(List<T> listItems)
+        {
+            using (var redisClient = _redisManager.GetClient())
+            {
+                var redis = redisClient.As<T>();
+                redis.StoreAll(listItems);
+            }
+        }
+
+        public void SetAll<T>(List<T> list, string hash, string value, string keyName)
+        {
+            foreach (var item in list)
+            {
+                Type t = item.GetType();
+                PropertyInfo prop = t.GetProperty(keyName);
+
+                _redisManager.GetClient().SetEntryInHash(hash, prop.GetValue(item).ToString(), value.ToLower());
+
+                _redisManager.GetClient().As<T>().StoreAll(list);
+            }
+        }
+
+        public void SetAll<T>(List<T> list, List<string> hash, List<string> value, string keyName)
+        {
+            foreach (var item in list)
+            {
+                Type t = item.GetType();
+                PropertyInfo prop = t.GetProperty(keyName);
+
+                for (int i = 0; i < hash.Count; i++)
+                {
+                    _redisManager.GetClient().SetEntryInHash(hash[i], prop.GetValue(item).ToString(), value[i].ToLower());
+                }
+
+                _redisManager.GetClient().As<T>().StoreAll(list);
+            }
+        }
+
+        public void Delete<T>(T item)
+        {
+            using (var redisClient = _redisManager.GetClient())
+            {
+                var redis = redisClient.As<T>();
+                redis.Delete(item);
+            }
+        }
+
+        public void DeleteAll<T>(T item)
+        {
+            using (var redisClient = _redisManager.GetClient())
+            {
+                var redis = redisClient.As<T>();
+                redis.DeleteAll();
+            }
+        }
+
+        public long PublishMessage(string channel, object item)
+        {
+            var ret = _redisManager.GetClient().PublishMessage(channel, JsonConvert.SerializeObject(item));
+            return ret;
+        }
+
+        public Task<byte[]> GetAsync(string key, CancellationToken token = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetAsync(string key, byte[] value, DistributedCacheEntryOptions options, CancellationToken token = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RefreshAsync(string key, CancellationToken token = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveAsync(string key, CancellationToken token = default)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
-
-        /// <summary>
-        /// 验证是否存在
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        private bool Exists(string key)
-        {
-            var returnBool = true;
-            var val = _redisCache.Get(key);
-            if (val == null || val.Length == 0)
-                returnBool = false;
-            return returnBool;
-        }
     }
 }

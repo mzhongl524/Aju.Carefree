@@ -1,101 +1,25 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace Aju.Carefree.Cache
 {
-    public interface ICacheService
+    public interface ICacheService: IDistributedCache
     {
-        #region Get
-
-        /// <summary>
-        /// 获取缓存
-        /// </summary>
-        /// <param name="key">缓存key</param>
-        /// <returns></returns>
-        string Get(string key);
-
-        /// <summary>
-        /// 获取缓存
-        /// </summary>
-        /// <param name="key">缓存key</param>
-        /// <returns></returns>
-        Task<string> GetAsync(string key);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        string GetString(string key);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        Task<string> GetStringAsync(string key);
-        #endregion
-
-        #region Set
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        void SetString(string key, string value);
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        Task SetStringAsync(string key, string value);
-        /// <summary>
-        /// 添加缓存
-        /// </summary>
-        /// <param name="key">缓存key</param>
-        /// <param name="value">缓存值</param>
-        /// <param name="expirationTime">绝对过期时间(分钟)</param>
-        void Set(string key, string value, int expirationTime = 20);
-
-        /// <summary>
-        /// 添加缓存
-        /// </summary>
-        /// <param name="key">缓存key</param>
-        /// <param name="value">缓存值</param>
-        /// <param name="expirationTime">绝对过期时间(分钟)</param>
-        Task SetAsync(string key, string value, int expirationTime = 20);
-        #endregion
-
-        #region Remove
-        /// <summary>
-        /// 移除缓存
-        /// </summary>
-        /// <param name="key"></param>
-        void Remove(string key);
-
-
-        /// <summary>
-        /// 移除缓存
-        /// </summary>
-        /// <param name="key"></param>
-        Task RemoveAsync(string key);
-        #endregion
-
-        #region Modify
-        /// <summary>
-        /// 更新缓存
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <param name="expirationTime"></param>
-        void Modify(string key, string value, int expirationTime = 20);
-
-        /// <summary>
-        /// 更新缓存
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <param name="expirationTime"></param>
-        Task ModifyAsync(string key, string value, int expirationTime = 20);
-        #endregion
+        void Delete<T>(T item); // 删除
+        void DeleteAll<T>(T item);
+        T Get<T>(string id);
+        IQueryable<T> GetAll<T>();
+        IQueryable<T> GetAll<T>(string hash, string value);
+        IQueryable<T> GetAll<T>(string hash, string value, Expression<Func<T, bool>> filter);
+        long PublishMessage(string channel, object item);
+        void Set<T>(T item);
+        void Set<T>(T item, List<string> hash, List<string> value, string keyName);
+        void Set<T>(T item, string hash, string value, string keyName);
+        void SetAll<T>(List<T> listItems);
+        void SetAll<T>(List<T> list, List<string> hash, List<string> value, string keyName);
+        void SetAll<T>(List<T> list, string hash, string value, string keyName);
     }
 }

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Aju.Carefree.NetCore.Attributes
 {
+    //https://github.com/AjuPrince/Aju.Carefree
     /// <summary>
     /// 缓存属性。
     /// <para>
@@ -30,9 +31,7 @@ namespace Aju.Carefree.NetCore.Attributes
             var parameters = context.ServiceMethod.GetParameters();
             //判断Method是否包含ref / out参数
             if (parameters.Any(it => it.IsIn || it.IsOut))
-            {
                 await next(context);
-            }
             else
             {
                 var key = string.IsNullOrEmpty(CacheKey)
@@ -46,19 +45,14 @@ namespace Aju.Carefree.NetCore.Attributes
                         context.ReturnValue = Task.FromResult(temp);
                     }
                     else
-                    {
                         context.ReturnValue = value;
-                    }
                 }
                 else
                 {
                     await context.Invoke(next);
                     dynamic returnValue = context.ReturnValue;
                     if (context.ServiceMethod.IsReturnTask())
-                    {
                         returnValue = returnValue.Result;
-                    }
-
                     _cache.Set(key, (object)returnValue, new MemoryCacheEntryOptions()
                     {
                         AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(Expiration)

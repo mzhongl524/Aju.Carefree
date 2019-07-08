@@ -14,6 +14,7 @@ using System.Reflection;
 
 namespace Aju.Carefree.NetCore.Extensions
 {
+    //https://github.com/AjuPrince/Aju.Carefree
     /// <summary>
     /// IServiceCollection扩展
     /// </summary>
@@ -181,20 +182,14 @@ namespace Aju.Carefree.NetCore.Extensions
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
             if (redisConnectionStrings == null || redisConnectionStrings.Length == 0)
-            {
                 throw new ArgumentNullException(nameof(redisConnectionStrings));
-            }
             CSRedisClient redisClient;
             if (redisConnectionStrings.Length == 1)
-            {
                 //单机模式
                 redisClient = new CSRedisClient(redisConnectionStrings[0]);
-            }
             else
-            {
                 //集群模式
                 redisClient = new CSRedisClient(NodeRule: null, connectionStrings: redisConnectionStrings);
-            }
             //初始化 RedisHelper
             RedisHelper.Initialization(redisClient);
             //注册mvc分布式缓存

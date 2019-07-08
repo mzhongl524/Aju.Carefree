@@ -58,8 +58,6 @@ namespace Aju.Carefree.Web
             //});
             // services.Add(ServiceDescriptor.Singleton<ICacheService, RedisCacheService>());
 
-
-
             //services.AddDistributedRedisCache(option =>
             //{
             //    option.Configuration = Configuration.GetSection("Cache")["ConnectionCacheStr"];
@@ -90,7 +88,6 @@ namespace Aju.Carefree.Web
 
 
             #region Redis
-
             var redisConnectionString = Configuration.GetConnectionString("Redis");
             //启用Redis
             services.UseCsRedisClient(redisConnectionString);
@@ -99,7 +96,6 @@ namespace Aju.Carefree.Web
             //全局设置Redis缓存有效时间为5分钟。
             //services.Configure<DistributedCacheEntryOptions>(option =>
             //    option.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5));
-
             #endregion
             //AddMiniProfiler
             services.AddMiniProfiler(options =>
@@ -134,6 +130,7 @@ namespace Aju.Carefree.Web
             //var applicationContainer = builder.Build();
 
             //return new AutofacServiceProvider(applicationContainer);
+
             #endregion
 
             services.AddSingleton(Configuration)

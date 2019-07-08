@@ -17,7 +17,7 @@ namespace Aju.Carefree.Web.Controllers
         private List<ViewModel> _list = new List<ViewModel>();
 
         //private readonly ICacheService _cache;
-
+     
         public DemoController(IAreaService areaService)
         {
             _areaService = areaService;

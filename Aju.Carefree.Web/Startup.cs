@@ -63,8 +63,6 @@ namespace Aju.Carefree.Web
             //    option.Configuration = Configuration.GetSection("Cache")["ConnectionCacheStr"];
             //});
 
-
-
             services.AddSession();
             //CSRF
             services.AddAntiforgery(options =>
@@ -164,7 +162,7 @@ namespace Aju.Carefree.Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Login}/{action=Index}/{id?}");
             });
         }
     }

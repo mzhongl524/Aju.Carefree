@@ -11,7 +11,7 @@ namespace Aju.Carefree.IRepositories
     /// 基础Repository
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IBaseRepositroy<T,TKey> : IDependency where T : class, new()
+    public interface IBaseRepositroy<T, TKey> : IDependency where T : class, new()
     {
         #region Select
         /// <summary>
@@ -61,7 +61,7 @@ namespace Aju.Carefree.IRepositories
         /// <param name="order">排序</param>
         /// <returns></returns>
 
-        IEnumerable<T> FindListByClause(Expression<Func<T, bool>> where = null, Expression<Func<T, bool>> order = null);
+        IEnumerable<T> FindListByClause(Expression<Func<T, bool>> where = null, Expression<Func<T, object>> order = null);
 
         /// <summary>
         /// 根据条件查询数据
@@ -69,7 +69,7 @@ namespace Aju.Carefree.IRepositories
         /// <param name="where">条件表达式树</param>
         /// <param name="order">排序</param>
         /// <returns></returns>
-        Task<IEnumerable<T>> FindListByClauseAsync(Expression<Func<T, bool>> where = null, Expression<Func<T, bool>> order = null);
+        Task<IEnumerable<T>> FindListByClauseAsync(Expression<Func<T, bool>> where = null, Expression<Func<T, object>> order = null);
 
         /// <summary>
         /// 根据条件分页查询
@@ -79,7 +79,7 @@ namespace Aju.Carefree.IRepositories
         /// <param name="pageSize"></param>
         /// <param name="order"></param>
         /// <returns></returns>
-        IEnumerable<T> PageQuery(Expression<Func<T, bool>> predicate, int skip, int pageSize = 15, Expression<Func<T, bool>> order = null);
+        IEnumerable<T> PageQuery(Expression<Func<T, bool>> predicate, int skip, int pageSize = 15, Expression<Func<T, object>> order = null);
 
         /// <summary>
         /// 根据条件分页查询
@@ -89,7 +89,7 @@ namespace Aju.Carefree.IRepositories
         /// <param name="pageSize"></param>
         /// <param name="order"></param>
         /// <returns></returns>
-        Task<IEnumerable<T>> PageQueryAsync(Expression<Func<T, bool>> predicate, int skip, int pageSize = 15, Expression<Func<T, bool>> order = null);
+        Task<IEnumerable<T>> PageQueryAsync(Expression<Func<T, bool>> predicate, int skip, int pageSize = 15, Expression<Func<T, object>> order = null);
 
         /// <summary>
         /// 分页查询
@@ -195,5 +195,7 @@ namespace Aju.Carefree.IRepositories
         /// <returns></returns>
         Task<int> InsertAsync(List<T> t);
         #endregion
+
+        void ShadowCopy(object a, object b);
     }
 }

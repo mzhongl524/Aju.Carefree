@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Aju.Carefree.NetCore.Attributes
 {
-    //https://github.com/AjuPrince/Aju.Carefree
+    //https://github.com/VictorTzeng/Zxw.Framework.NetCore/blob/master/Zxw.Framework.NetCore/Cache/DistributedCacheManager.cs
     /// <summary>
     /// 缓存属性。
     /// <para>
@@ -24,6 +24,7 @@ namespace Aju.Carefree.NetCore.Attributes
         public int Expiration { get; set; } = 10 * 60;
 
         public string CacheKey { get; set; } = null;
+
 
         public override async Task Invoke(AspectContext context, AspectDelegate next)
         {

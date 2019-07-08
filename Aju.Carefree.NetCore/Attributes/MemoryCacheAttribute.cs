@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace Aju.Carefree.NetCore.Attributes
 {
-    //https://github.com/AjuPrince/Aju.Carefree
     /// <summary>
     /// 缓存属性。
     /// <para>

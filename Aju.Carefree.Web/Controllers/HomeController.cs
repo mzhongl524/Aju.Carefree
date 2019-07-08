@@ -1,11 +1,12 @@
 ﻿using Aju.Carefree.NetCore.Attributes;
+using Aju.Carefree.NetCore.Cache;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aju.Carefree.Web.Controllers
 {
-    public class HomeController : Controller
+    [TypeFilter(typeof(HandleLoginAsyncAttribute))]
+    public class HomeController : AjuCarfreControllerBase
     {
-
         public IActionResult Index()
         {
             return View();
@@ -24,6 +25,11 @@ namespace Aju.Carefree.Web.Controllers
             return s1;
         }
 
+        public string GetRedisValue()
+        {
+            var str = DistributedCacheManager.Get("Aju");
+            return str.Replace("\"", "");
+        }
 
         private string _GetStr()
         {

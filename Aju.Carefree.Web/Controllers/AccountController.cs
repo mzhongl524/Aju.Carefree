@@ -22,7 +22,7 @@ namespace Aju.Carefree.Web.Controllers
             BaseResult result = new BaseResult();
             //得到图片验证码
             var sessionValue = HttpContext.Session.GetString(_CaptchaCodeSessionName);
-            if (sessionValue == viewModel.code)
+            if (sessionValue.ToLower() == viewModel.code.ToLower())
             {
                 //模拟登录加入缓存
                 var admin = AddAdminCache();

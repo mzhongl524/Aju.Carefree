@@ -13,7 +13,17 @@ namespace Aju.Carefree.NetCore.Cache
     /// </summary>
     public class DistributedCacheManager
     {
-        private static IDistributedCache Instance => AspectCoreContainer.Resolve<IDistributedCache>();
+        private static IDistributedCache _Instance = null;
+
+        private static IDistributedCache Instance
+        {
+            get
+            {
+                if (_Instance == null)
+                    _Instance = AspectCoreContainer.Resolve<IDistributedCache>();
+                return _Instance;
+            }
+        }
 
         public static string Get(string key)
         {

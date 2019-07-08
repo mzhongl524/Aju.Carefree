@@ -1,6 +1,8 @@
 ﻿using Aju.Carefree.NetCore.Attributes;
 using Aju.Carefree.NetCore.Cache;
+using Aju.Carefree.NetCore.Helpers;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace Aju.Carefree.Web.Controllers
 {
@@ -27,8 +29,13 @@ namespace Aju.Carefree.Web.Controllers
 
         public string GetRedisValue()
         {
-            var str = DistributedCacheManager.Get("Aju");
-            return str.Replace("\"", "");
+            string str = "xzxzxzxxzx";
+            DistributedCacheManager.Set("XXX", ByteConvertHelper.Object2Bytes(str), options: new Microsoft.Extensions.Caching.Distributed.DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1)
+            });
+            var val = DistributedCacheManager.GetByte("XXX");
+            return (string)ByteConvertHelper.Bytes2Object(val);
         }
 
         private string _GetStr()

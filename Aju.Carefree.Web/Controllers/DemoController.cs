@@ -39,13 +39,6 @@ namespace Aju.Carefree.Web.Controllers
             }
         }
 
-        //public async Task<IActionResult> Index()
-        //{
-        //    //await _cache.SetStringAsync("123", "321");
-        //    //var s = await _cache.GetStringAsync("123");
-        //    return Content(s);
-        //}
-
         //读取数据
         public async Task<IActionResult> DbIndex()
         {

@@ -6,7 +6,7 @@ using System;
 
 namespace Aju.Carefree.Web.Controllers
 {
-    [TypeFilter(typeof(HandleLoginAsyncAttribute))]
+    [HandleLoginAsync]
     public class HomeController : AjuCarfreControllerBase
     {
         public IActionResult Index()

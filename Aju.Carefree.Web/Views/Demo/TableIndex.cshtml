@@ -19,7 +19,7 @@
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-body ">
-                    <form class="layui-form layui-col-space5">
+                    <div class="layui-col-space5">
                         <div class="layui-inline layui-show-xs-block">
                             <input class="layui-input" autocomplete="off" placeholder="开始日" name="start" id="start">
                         </div>
@@ -27,12 +27,12 @@
                             <input class="layui-input" autocomplete="off" placeholder="截止日" name="end" id="end">
                         </div>
                         <div class="layui-inline layui-show-xs-block">
-                            <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                            <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input searchVal">
                         </div>
                         <div class="layui-inline layui-show-xs-block">
                             <button class="layui-btn search_btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
                         </div>
-                    </form>
+                    </div>
                 </div>
                 <div class="layui-card-header">
                     <button class="layui-btn layui-btn-danger" onclick="btn_add()"><i class="layui-icon">&#xe61f;</i>添加</button>
@@ -60,6 +60,7 @@
                 elem: '#table',
                 height: 312,
                 cellMinWidth: 95,
+                toolbar: true,
                 url: '/Demo/GetTableData', //数据接口
                 page: true,  //开启分页
                 id: "listTable",
@@ -80,12 +81,14 @@
             //搜索
             $(".search_btn").on("click", function ()
             {
+                debugger;
                 table.reload("listTable", {
+                    url: "/Demo/GetTableData",
                     page: {
                         curr: 1 //重新从第 1 页开始
                     },
                     where: {
-                        //key: $(".searchVal").val()  //搜索的关键字
+                        key: $(".searchVal").val()  //搜索的关键字
                     }
                 });
             });

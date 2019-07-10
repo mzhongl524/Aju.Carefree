@@ -31,8 +31,6 @@ namespace Aju.Carefree.Dto.ViewModel
         /// </summary>
         public int count { get; set; }
     }
-
-
     public class AuthTreeViewModel : FrontPageBaseViewModel
     {
        

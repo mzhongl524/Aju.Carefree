@@ -6,7 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Aju.Carefree.Web.Controllers
 {
-    public class ItemController : Controller
+    /// <summary>
+    /// 系统字典
+    /// </summary>
+   // [HandleLoginAsync]
+    public class ItemController : AjuCarfreControllerBase
     {
         public IActionResult Index()
         {

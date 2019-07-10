@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System;
 using System.Threading.Tasks;
 
 namespace Aju.Carefree.Web.Controllers
@@ -10,7 +11,8 @@ namespace Aju.Carefree.Web.Controllers
         protected string _CaptchaCodeSessionName = "CaptchaCode";
     }
 
-    public class HandleLoginAsyncAttribute : IAsyncActionFilter
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+    public class HandleLoginAsyncAttribute : Attribute, IAsyncActionFilter
     {
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
@@ -21,18 +23,6 @@ namespace Aju.Carefree.Web.Controllers
                 return;
             }
             await next.Invoke();
-        }
-    }
-    public class HandleLoginAttribute : IActionFilter
-    {
-        public void OnActionExecuted(ActionExecutedContext context)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void OnActionExecuting(ActionExecutingContext context)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

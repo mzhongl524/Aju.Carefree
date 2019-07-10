@@ -1,0 +1,110 @@
+﻿@{
+    Layout = "_TabLayoutIndex";
+    ViewBag.Title = "Index";
+}
+<div class="x-nav">
+    <span class="layui-breadcrumb">
+        <a href="">系统管理</a>
+        <a href="">系统字典管理</a>
+        <a>
+            <cite>系统字典</cite>
+        </a>
+    </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
+        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
+    </a>
+</div>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                <form class="layui-form layui-col-space12">
+                    <div class="layui-inline layui-show-xs-block">
+                        <input type="text" name="username" placeholder="名称/编号" autocomplete="off" class="layui-input" id="edt-search">
+                    </div>
+                    <div class="layui-inline layui-show-xs-block">
+                        <button class="layui-btn search_btn" lay-submit="" lay-filter="sreach" id="btn-search"><i class="layui-icon">&#xe615;</i></button>
+                    </div>
+                </form>
+            </div>
+            <div class="layui-card-body layui-col-md4">
+                <table id="auth-table" class="layui-table" lay-filter="auth-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--操作-->
+<script type="text/html" id="listBar">
+    <a class="layui-btn layui-btn-xs" lay-event="edit"><i class="layui-icon">&#xe642;</i>编辑</a>
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><i class="layui-icon">&#xe640;</i>删除</a>
+</script>
+@section Scripts{
+<script>
+    layui.config({ base: '/lib/extends/', }).extend({ treetable: 'treeTable', })
+        .use(['table', 'treetable'], function ()
+        {
+            var $ = layui.jquery;
+            var table = layui.table;
+            var treetable = layui.treetable;
+            // 渲染表格
+            layer.load(2);
+            treetable.render({
+                treeColIndex: 1,
+                treeSpid: -1,
+                treeIdName: 'authorityId',
+                treePidName: 'parentId',
+                elem: '#auth-table',
+                url: '/Demo/GetTreeTable',
+                page: false,
+                cols: [[
+                    { type: 'numbers' },
+                    { field: 'authorityName', minWidth: 200, title: '权限名称' },
+                    { field: 'authority', title: '权限标识' },
+                    { field: 'menuUrl', title: '菜单url' },
+                    {
+                        field: 'isMenu', width: 80, align: 'center', templet: function (d)
+                        {
+                            if (d.isMenu == 1) {
+                                return '<span class="layui-badge layui-bg-gray">按钮</span>';
+                            }
+                            if (d.parentId == -1) {
+                                return '<span class="layui-badge layui-bg-blue">目录</span>';
+                            } else {
+                                return '<span class="layui-badge-rim">菜单</span>';
+                            }
+                        }, title: '类型'
+                    }
+                ]],
+                done: function ()
+                {
+                    layer.closeAll('loading');
+                }
+            });
+
+            $('#btn-search').click(function ()
+            {
+                var keyword = $('#edt-search').val();
+                var searchCount = 0;
+                $('#auth-table').next('.treeTable').find('.layui-table-body tbody tr td').each(function ()
+                {
+                    $(this).css('background-color', 'transparent');
+                    var text = $(this).text();
+                    if (keyword != '' && text.indexOf(keyword) >= 0) {
+                        $(this).css('background-color', 'rgba(250,230,160,0.5)');
+                        if (searchCount == 0) {
+                            treetable.expandAll('#auth-table');
+                            $('html,body').stop(true);
+                            $('html,body').animate({ scrollTop: $(this).offset().top - 150 }, 500);
+                        }
+                        searchCount++;
+                    }
+                });
+                if (keyword == '') {
+                    layer.msg("请输入搜索内容", { icon: 5 });
+                } else if (searchCount == 0) {
+                    layer.msg("没有匹配结果", { icon: 5 });
+                }
+            });
+        });
+</script>
+}

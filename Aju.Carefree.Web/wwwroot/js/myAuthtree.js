@@ -1,4 +1,4 @@
-﻿layui.config({ base: '/lib/extends/', }).extend({ authtree: 'authtree', });
+﻿layui.config({ base: '/lib/extends/' }).extend({ authtree: 'authtree' });
 Authtree = function (url, bindId)
 {
     layui.use(['jquery', 'authtree', 'form', 'layer'], function ()

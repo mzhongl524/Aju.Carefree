@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aju.Carefree.Web", "Aju.Car
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aju.Carefree.Entity", "Aju.Carefree.Entity\Aju.Carefree.Entity.csproj", "{8B3DF995-86D4-461C-8350-A2416E91D48E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aju.Carefree.NetCore", "Aju.Carefree.NetCore\Aju.Carefree.NetCore.csproj", "{943D1F34-28BB-4E98-A57C-2B3F3CE0E59B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aju.Carefree.NetCore", "Aju.Carefree.NetCore\Aju.Carefree.NetCore.csproj", "{943D1F34-28BB-4E98-A57C-2B3F3CE0E59B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

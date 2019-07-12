@@ -26,6 +26,14 @@
                         <button class="layui-btn search_btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
                     </div>
                 </div>
+                <div class="layui-col-space12">
+                    <div class="layui-inline layui-show-xs-block">
+                        <input type="text" name="key" placeholder="名称/编号" autocomplete="off" class="layui-input searchVal">
+                    </div>
+                    <div class="layui-inline layui-show-xs-block">
+                        <button class="layui-btn search_btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+                    </div>
+                </div>
             </div>
             <div class="layui-card-body">
                 <table id="auth-table" class="layui-table" lay-filter="auth-table"></table>
@@ -35,74 +43,75 @@
 </div>
 <!-- 操作列 -->
 <script type="text/html" id="auth-state">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit"><i class="layui-icon">&#xe642;</i>修改</a>
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="add_sub"><i class="layui-icon">&#xe642;</i>添加子栏目</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon">&#xe640;</i>删除</a>
 </script>
 @section Scripts{
-    <script>
-        layui.config({ base: '/lib/extends/' }).extend({ treetable: 'treetable-lay/treetable' }).use(['table', 'treetable'], function ()
-        {
-            var $ = layui.jquery;
-            var table = layui.table;
-            var treetable = layui.treetable;
+<script>
+    layui.config({ base: '/lib/extends/' }).extend({ treetable: 'treetable-lay/treetable' }).use(['table', 'treetable'], function ()
+    {
+        var $ = layui.jquery;
+        var table = layui.table;
+        var treetable = layui.treetable;
 
-            // 渲染表格
-            layer.load(2);
-            treetable.render({
-                treeColIndex: 1,
-                treeSpid: -1,
-                treeIdName: 'authorityId',
-                treePidName: 'parentId',
-                elem: '#auth-table',
-                url: '/Demo/GetTreeTable',
-                page: false,
-                id: "listTable",
-                cols: [[
-                    { type: 'numbers', width: 80, title: '序号', align: 'center' },
-                    { field: 'authorityName', width: 350, title: '权限名称' },
-                    { field: 'authority', width: 150, title: '权限标识' },
-                    { field: 'menuUrl', title: '菜单url' },
-                    {
-                        field: 'isMenu', width: 80, align: 'center', templet: function (d)
-                        {
-                            if (d.isMenu == 1) {
-                                return '<span class="layui-badge layui-bg-gray">按钮</span>';
-                            }
-                            if (d.parentId == -1) {
-                                return '<span class="layui-badge layui-bg-blue">目录</span>';
-                            } else {
-                                return '<span class="layui-badge-rim">菜单</span>';
-                            }
-                        }, title: '类型'
-                    },
-                    { templet: '#auth-state', width: 150, align: 'center', title: '操作' }
-                ]],
-                done: function ()
+        // 渲染表格
+        layer.load(2);
+        treetable.render({
+            treeColIndex: 1,
+            treeSpid: -1,
+            treeIdName: 'authorityId',
+            treePidName: 'parentId',
+            elem: '#auth-table',
+            url: '/Demo/GetTreeTable',
+            page: false,
+            id: "listTable",
+            cols: [[
+                { type: 'numbers', width: 80, title: '序号', align: 'center' },
+                { field: 'authorityName', width: 350, title: '权限名称' },
+                { field: 'authority', width: 150, title: '权限标识' },
+                { field: 'menuUrl', title: '菜单url' },
                 {
-                    layer.closeAll('loading');
-                }
-            });
-            //搜索
-            $(".search_btn").on("click", function ()
+                    field: 'isMenu', width: 80, align: 'center', templet: function (d)
+                    {
+                        if (d.isMenu == 1) {
+                            return '<span class="layui-badge layui-bg-gray">按钮</span>';
+                        }
+                        if (d.parentId == -1) {
+                            return '<span class="layui-badge layui-bg-blue">目录</span>';
+                        } else {
+                            return '<span class="layui-badge-rim">菜单</span>';
+                        }
+                    }, title: '类型'
+                },
+                { templet: '#auth-state', width: 300, align: 'center', title: '操作' }
+            ]],
+            done: function ()
             {
-                table.reload("listTable", {
-                    url: "/Demo/GetTreeTable",
-                    where: {
-                        key: $(".searchVal").val()  //搜索的关键字
-                    }
-                });
-            });
-
-            table.on('tool(auth-table)', function (obj)
-            {
-                var layEvent = obj.event,
-                    data = obj.data;
-                if (layEvent === 'edit') { //编辑
-                    alert(data.id);
-                } else if (layEvent === 'del') { //删除
-                }
-            });
-
+                layer.closeAll('loading');
+            }
         });
-    </script>
+        //搜索
+        $(".search_btn").on("click", function ()
+        {
+            table.reload("listTable", {
+                url: "/Demo/GetTreeTable",
+                where: {
+                    key: $(".searchVal").val()  //搜索的关键字
+                }
+            });
+        });
+
+        table.on('tool(auth-table)', function (obj)
+        {
+            var layEvent = obj.event,
+                data = obj.data;
+            if (layEvent === 'edit') { //编辑
+                alert(data.id);
+            } else if (layEvent === 'del') { //删除
+            }
+        });
+
+    });
+</script>
 }

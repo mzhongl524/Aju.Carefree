@@ -33,7 +33,7 @@ namespace Aju.Carefree.Dto.ViewModel
     }
     public class AuthTreeViewModel : FrontPageBaseViewModel
     {
-       
+
     }
     public class AuthTreeViewModelExt
     {
@@ -45,5 +45,40 @@ namespace Aju.Carefree.Dto.ViewModel
         public string value { get; set; }
         public bool @checked { get; set; }
         public List<AuthTreeViewModelList> list { get; set; }
+    }
+
+    /// <summary>
+    /// Layui Tree 前端数据 ViewModel
+    /// </summary>
+    public class LayuiTreeViewModel
+    {
+        /// <summary>
+        /// 节点标题
+        /// </summary>
+        public string title { get; set; }
+
+        /// <summary>
+        /// 节点唯一索引，用于对指定节点进行各类操作
+        /// </summary>
+        public string id { get; set; }
+        /// <summary>
+        /// 点击节点弹出新窗口对应的 url。需开启 isJump 参数
+        /// </summary>
+        public string href { get; set; }
+        /// <summary>
+        /// 节点是否初始展开，默认 false
+        /// </summary>
+        public bool spread { get; set; } = true;
+        /// <summary>
+        /// 节点是否初始为选中状态（如果开启复选框的话），默认 false
+        /// </summary>
+        public bool @checked { get; set; } = false;
+
+        /// <summary>
+        /// 节点是否为禁用状态。默认 false
+        /// </summary>
+        public bool disabled { get; set; } = false;
+
+        public List<LayuiTreeViewModel> children { get; set; }
     }
 }

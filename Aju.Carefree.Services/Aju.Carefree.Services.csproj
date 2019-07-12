@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Aju.Carefree.Dto\Aju.Carefree.Dto.csproj" />
     <ProjectReference Include="..\Aju.Carefree.IRepositories\Aju.Carefree.IRepositories.csproj" />
     <ProjectReference Include="..\Aju.Carefree.IServices\Aju.Carefree.IServices.csproj" />
   </ItemGroup>

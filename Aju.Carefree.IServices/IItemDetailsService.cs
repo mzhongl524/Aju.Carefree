@@ -20,5 +20,7 @@ namespace Aju.Carefree.IServices
         Task<bool> DeleteFormAsync(string keyValue);
 
         Task<IEnumerable<ItemsDetailEntity>> FindListByClauseAsync(Expression<Func<ItemsDetailEntity, bool>> where = null);
+
+        Task<IEnumerable<ItemsDetailEntity>> FindListByClauseAsync(string itemId);
     }
 }

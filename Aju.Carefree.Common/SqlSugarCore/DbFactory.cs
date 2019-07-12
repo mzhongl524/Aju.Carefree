@@ -18,6 +18,22 @@ namespace Aju.Carefree.Common.DataBaseCore
                     InitKeyType = InitKeyType.Attribute
                 }
             );
+            db.Aop.OnLogExecuted = (sql, pars) => //SQL执行完事件
+            {
+
+            };
+            db.Aop.OnLogExecuting = (sql, pars) => //SQL执行前事件
+            {
+
+            };
+            db.Aop.OnError = (exp) =>//执行SQL 错误事件
+            {
+                //exp.sql exp.parameters 可以拿到参数和错误Sql             
+            };
+            //db.Aop.OnExecutingChangeSql = (sql, pars) => //SQL执行前 可以修改SQL
+            //{
+            //    // return new KeyValuePair<string, SugarParameter[]>(sql, pars);
+            //};
             return db;
         }
     }

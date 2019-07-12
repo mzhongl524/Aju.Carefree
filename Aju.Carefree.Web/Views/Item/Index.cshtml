@@ -16,19 +16,40 @@
 </div>
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
-        <div class="layui-card">
-            <div class="layui-card-header">
-                <form class="layui-form layui-col-space12">
-                    <div class="layui-inline layui-show-xs-block">
-                        <input type="text" name="username" placeholder="名称/编号" autocomplete="off" class="layui-input" id="edt-search">
+        <div class="layui-row">
+            <div class="layui-col-xs3" style="padding-right:8px;">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div id="tree"></div>
                     </div>
-                    <div class="layui-inline layui-show-xs-block">
-                        <button class="layui-btn search_btn" lay-submit="" lay-filter="sreach" id="btn-search"><i class="layui-icon">&#xe615;</i></button>
-                    </div>
-                </form>
+                </div>
             </div>
-            <div class="layui-card-body layui-col-md4">
-                <table id="auth-table" class="layui-table" lay-filter="auth-table"></table>
+            <div class="layui-col-xs9">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-col-space12">
+                            <div class="layui-inline layui-show-xs-block">
+                                <input type="text" name="key" placeholder="名称/编号" autocomplete="off" class="layui-input searchVal">
+                            </div>
+                            <div class="layui-inline layui-show-xs-block">
+                                <button class="layui-btn search_btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="layui-card-body">
+                        <div class="layui-col-space12" style="text-align:right;">
+                            <div class="layui-btn-group">
+                                <button type="button" class="layui-btn">增加</button>
+                                <button type="button" class="layui-btn">编辑</button>
+                                <button type="button" class="layui-btn">删除</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-card-body">
+                        <table id="table" class="class=" layui-hide"></table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -40,71 +61,54 @@
 </script>
 @section Scripts{
 <script>
-    layui.config({ base: '/lib/extends/', }).extend({ treetable: 'treeTable', })
-        .use(['table', 'treetable'], function ()
-        {
-            var $ = layui.jquery;
-            var table = layui.table;
-            var treetable = layui.treetable;
-            // 渲染表格
-            layer.load(2);
-            treetable.render({
-                treeColIndex: 1,
-                treeSpid: -1,
-                treeIdName: 'authorityId',
-                treePidName: 'parentId',
-                elem: '#auth-table',
-                url: '/Demo/GetTreeTable',
-                page: false,
-                cols: [[
-                    { type: 'numbers' },
-                    { field: 'authorityName', minWidth: 200, title: '权限名称' },
-                    { field: 'authority', title: '权限标识' },
-                    { field: 'menuUrl', title: '菜单url' },
-                    {
-                        field: 'isMenu', width: 80, align: 'center', templet: function (d)
-                        {
-                            if (d.isMenu == 1) {
-                                return '<span class="layui-badge layui-bg-gray">按钮</span>';
-                            }
-                            if (d.parentId == -1) {
-                                return '<span class="layui-badge layui-bg-blue">目录</span>';
-                            } else {
-                                return '<span class="layui-badge-rim">菜单</span>';
-                            }
-                        }, title: '类型'
-                    }
-                ]],
-                done: function ()
-                {
-                    layer.closeAll('loading');
-                }
-            });
+    layui.use(['tree', 'jquery', 'table'], function ()
+    {
+        var tree = layui.tree
+            , layer = layui.layer
+            , $ = layui.jquery
+            , table = layui.table;
 
-            $('#btn-search').click(function ()
+        var data;
+        $.ajax({
+            url: "/Item/GetData",
+            async: false,
+            success: function (obj)
             {
-                var keyword = $('#edt-search').val();
-                var searchCount = 0;
-                $('#auth-table').next('.treeTable').find('.layui-table-body tbody tr td').each(function ()
-                {
-                    $(this).css('background-color', 'transparent');
-                    var text = $(this).text();
-                    if (keyword != '' && text.indexOf(keyword) >= 0) {
-                        $(this).css('background-color', 'rgba(250,230,160,0.5)');
-                        if (searchCount == 0) {
-                            treetable.expandAll('#auth-table');
-                            $('html,body').stop(true);
-                            $('html,body').animate({ scrollTop: $(this).offset().top - 150 }, 500);
-                        }
-                        searchCount++;
-                    }
-                });
-                if (keyword == '') {
-                    layer.msg("请输入搜索内容", { icon: 5 });
-                } else if (searchCount == 0) {
-                    layer.msg("没有匹配结果", { icon: 5 });
-                }
-            });
+                data = eval("(" + obj + ")");;
+            }
         });
+        //无连接线风格
+        tree.render({
+            elem: '#tree'
+            , data: data
+            , showLine: true//是否开启连接线
+            , click: function (obj)
+            {
+                if (obj.data.children == null)
+                    bindTable(obj.data.id)
+            }
+        });
+        function bindTable(id)
+        {
+            table.render({
+                id: "list_itemDetails",
+                elem: "#table",
+                url: "/Item/GetSubData?id=" + id,
+                loading: true,
+                toolbar: true,
+                title: "xxx",
+                defaultToolbar: ['filter', 'print', 'exports'],
+                cellMinWidth: 80,
+                cols: [[
+                    { field: 'Id', width: 80, title: 'ID', hide: true },
+                    { field: 'ItemName', width: 130, title: '名称' },
+                    { field: 'ItemCode', width: 130, title: '编号' },
+                    { field: 'SortCode', width: 80, title: '排序', sort: true },
+                    { field: 'CreatorTime', width: 160, title: '创建时间', sort: true },
+                    { field: 'Description', title: '备注' }
+                ]]
+            });
+        }
+    });
 </script>
 }

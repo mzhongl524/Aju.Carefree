@@ -1,4 +1,5 @@
-﻿using Aju.Carefree.Entity;
+﻿using Aju.Carefree.Dto.ViewModel;
+using Aju.Carefree.Entity;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,6 +11,8 @@ namespace Aju.Carefree.IServices
 
         Task<bool> SubmitFormAsync(ItemsEntity entity, string keyValue);
 
-        Task<bool>  DeleteFormAsync(string keyValue);
+        Task<bool> DeleteFormAsync(string keyValue);
+
+        Task<List<LayuiTreeViewModel>> GetViewModel();
     }
 }

@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Aju.Carefree.Common\Aju.Carefree.Common.csproj" />
+    <ProjectReference Include="..\Aju.Carefree.Dto\Aju.Carefree.Dto.csproj" />
     <ProjectReference Include="..\Aju.Carefree.IRepositories\Aju.Carefree.IRepositories.csproj" />
     <ProjectReference Include="..\Aju.Carefree.NetCore\Aju.Carefree.NetCore.csproj" />
   </ItemGroup>

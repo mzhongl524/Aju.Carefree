@@ -21,6 +21,6 @@ namespace Aju.Carefree.IServices
 
         Task<IEnumerable<ItemsDetailEntity>> FindListByClauseAsync(Expression<Func<ItemsDetailEntity, bool>> where = null);
 
-        Task<IEnumerable<ItemsDetailEntity>> FindListByClauseAsync(string itemId);
+        Task<IEnumerable<ItemsDetailEntity>> FindListByClauseAsync(string itemId, string key);
     }
 }

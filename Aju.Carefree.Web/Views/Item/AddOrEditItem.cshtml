@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "TreeIndex";
+    ViewData["Title"] = "AddOrEditItem";
     Layout = "~/Views/Shared/_TabLayoutIndex.cshtml";
 }
 <div class="layui-fluid">
@@ -18,17 +18,3 @@
         </div>
     </form>
 </div>
-@section Scripts {
-<script src="~/js/myLayer.js"></script>
-<script src="~/js/myAuthtree.js"></script>
-<script>
-    var r = Authtree("/Demo/GetTreeData", "#LAY-auth-tree-index");
-    function submitForm(index)
-    {
-        //得到字节点的值
-        console.log(getAuthtreeLeafValue("#LAY-auth-tree-index"));
-        //得到所有选中节点的值
-        console.log(getAuthtreeCheckedValue("#LAY-auth-tree-index"));
-    }
-</script>
-}

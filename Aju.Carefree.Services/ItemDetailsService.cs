@@ -75,9 +75,13 @@ namespace Aju.Carefree.Services
             return await _repository.FindListByClauseAsync(where);
         }
 
-        public async Task<IEnumerable<ItemsDetailEntity>> FindListByClauseAsync(string itemId)
+        public async Task<IEnumerable<ItemsDetailEntity>> FindListByClauseAsync(string itemId, string key)
         {
-            return await _repository.FindListByClauseAsync(s => s.ItemId.Equals(itemId) && s.DeleteMark == false && s.EnabledMark == true);
+            if (!string.IsNullOrWhiteSpace(key))
+                return await _repository.FindListByClauseAsync(s =>
+                s.ItemId.Equals(itemId) && s.DeleteMark == false && s.EnabledMark == true && s.ItemName.Contains(key));
+            return await _repository.FindListByClauseAsync(s =>
+                s.ItemId.Equals(itemId) && s.DeleteMark == false && s.EnabledMark == true);
         }
     }
 }

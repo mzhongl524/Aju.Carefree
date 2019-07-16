@@ -22,7 +22,7 @@ namespace Aju.Carefree.Web
 {
     public class Startup
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        //private readonly Logger logger = LogManager.GetCurrentClassLogger();
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
@@ -36,7 +36,6 @@ namespace Aju.Carefree.Web
         {
             //数据库配置
             services.Configure<DbOption>("Aju.Carefree", Configuration.GetSection("DbOption"));
-
             //Cookie
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -63,6 +62,8 @@ namespace Aju.Carefree.Web
             //    option.Configuration = Configuration.GetSection("Cache")["ConnectionCacheStr"];
             //});
 
+
+
             services.AddSession();
             //CSRF
             services.AddAntiforgery(options =>
@@ -82,8 +83,8 @@ namespace Aju.Carefree.Web
                 //去掉其他的验证，只使用FluentValidation的验证规则
                 fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
             });
-
-
+            //添加数据保护组件
+            services.AddDataProtection();
 
             #region Redis
             var redisConnectionString = Configuration.GetConnectionString("Redis");
@@ -148,7 +149,6 @@ namespace Aju.Carefree.Web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseSession();

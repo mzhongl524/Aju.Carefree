@@ -36,14 +36,19 @@ namespace Aju.Carefree.Web.Controllers
             return JsonHelper.Instance.Serialize(data);
         }
 
-        public async Task<string> GetSubData(string id)
+        public async Task<string> GetSubData(string id, int page, int limit, string key)
         {
-            var data = await _itemDetailsService.FindListByClauseAsync(id);
+            var data = await _itemDetailsService.FindListByClauseAsync(id, key);
             return JsonHelper.Instance.Serialize(new TableDataModel
             {
                 count = data.Count(),
                 data = data.ToList()
             });
+        }
+
+        public IActionResult AddOrEditItem(string id)
+        {
+            return View();
         }
     }
 }

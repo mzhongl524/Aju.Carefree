@@ -6,9 +6,7 @@
     <span class="layui-breadcrumb">
         <a href="">系统管理</a>
         <a href="">系统字典管理</a>
-        <a>
-            <cite>系统字典</cite>
-        </a>
+        <a><cite>系统字典</cite> </a>
     </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
         <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
@@ -19,6 +17,14 @@
         <div class="layui-row">
             <div class="layui-col-xs3" style="padding-right:8px;">
                 <div class="layui-card">
+                    <div class="layui-card-body" style="text-align:right;">
+                        <div class="layui-col-space12" style="text-align:right;">
+                            <div class="layui-btn-group">
+                                <button type="button" class="layui-btn" id="btn_addItem"><i class="layui-icon layui-icon-add-1"></i>增加</button>
+                                <button type="button" class="layui-btn" id="btn_editItem"><i class="layui-icon layui-icon-edit"></i>编辑</button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="layui-card-body">
                         <div id="tree"></div>
                     </div>
@@ -40,9 +46,9 @@
                     <div class="layui-card-body">
                         <div class="layui-col-space12" style="text-align:right;">
                             <div class="layui-btn-group">
-                                <button type="button" class="layui-btn">增加</button>
-                                <button type="button" class="layui-btn">编辑</button>
-                                <button type="button" class="layui-btn">删除</button>
+                                <button type="button" class="layui-btn"><i class="layui-icon layui-icon-add-1"></i>增加</button>
+                                <button type="button" class="layui-btn"><i class="layui-icon layui-icon-edit"></i>编辑</button>
+                                <button type="button" class="layui-btn"><i class="layui-icon layui-icon-delete"></i>删除</button>
                             </div>
                         </div>
                     </div>
@@ -60,6 +66,7 @@
     <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><i class="layui-icon">&#xe640;</i>删除</a>
 </script>
 @section Scripts{
+<script src="~/js/myLayer.js"></script>
 <script>
     layui.use(['tree', 'jquery', 'table'], function ()
     {
@@ -67,7 +74,7 @@
             , layer = layui.layer
             , $ = layui.jquery
             , table = layui.table;
-
+        var itemId;
         var data;
         $.ajax({
             url: "/Item/GetData",
@@ -84,8 +91,10 @@
             , showLine: true//是否开启连接线
             , click: function (obj)
             {
-                if (obj.data.children == null)
+                if (obj.data.children == null) {
+                    itemId = obj.data.id;
                     bindTable(obj.data.id)
+                }
             }
         });
         function bindTable(id)
@@ -109,6 +118,36 @@
                 ]]
             });
         }
+        $(".search_btn").on("click", function ()
+        {
+            debugger;
+            table.reload("list_itemDetails", {
+                url: "/Item/GetSubData?id=" + itemId,
+                where: {
+                    key: $(".searchVal").val()  //搜索的关键字
+                }
+            });
+        });
+
+        $("#btn_addItem").on("click", function ()
+        {
+            modalOpen({
+                id: 'From',
+                title: '新增数据字典',
+                width: '500px',
+                height: '560px',
+                url: "/Item/AddOrEditItem",
+                callBack: function (iframeId, index)
+                {
+                    top.frames[iframeId].submitForm(index);
+                }
+            });
+        });
+        $("#btn_editItem").on("click", function ()
+        {
+            if (itemId != null)
+                layer.alert(itemId);
+        });
     });
 </script>
 }

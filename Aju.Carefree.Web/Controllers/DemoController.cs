@@ -4,6 +4,7 @@ using Aju.Carefree.Dto;
 using Aju.Carefree.Dto.ViewModel;
 using Aju.Carefree.Entity;
 using Aju.Carefree.IServices;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -17,9 +18,13 @@ namespace Aju.Carefree.Web.Controllers
         private readonly IAreaService _areaService;
         private List<ViewModel> _list = new List<ViewModel>();
 
+        private List<DataDemoViewModel> _listDataProtect = new List<DataDemoViewModel>();
+
+        private readonly IDataProtector _dataProtector;
+
         //private readonly ICacheService _cache;
 
-        public DemoController(IAreaService areaService)
+        public DemoController(IAreaService areaService, IDataProtectionProvider dataProtectionProvider)
         {
             _areaService = areaService;
             //_cache = cache;
@@ -38,6 +43,13 @@ namespace Aju.Carefree.Web.Controllers
                     username = "Aju"
                 });
             }
+
+            //创建模拟数据
+            for (int i = 0; i < 6; i++)
+            {
+                _listDataProtect.Add(new DataDemoViewModel(i, "Aju_Carefree" + i));
+            }
+            _dataProtector = dataProtectionProvider.CreateProtector("aju_carefree_string");
         }
 
         //读取数据
@@ -137,6 +149,27 @@ namespace Aju.Carefree.Web.Controllers
         #endregion
 
 
+        #region 数据保护组件Demo
+        public IActionResult ProtectIndex()
+        {
+            var outputModel = _listDataProtect.Select(item => new
+            {
+                //使用 IDataProtector 接口的 Protect 方法对id字段进行加密
+                Id = _dataProtector.Protect(item.Id.ToString()),
+                item.Name
+            });
+            return Ok(outputModel);
+        }
+
+        public IActionResult GetProtect(string id)
+        {
+            //使用 IDataProtector 接口的 Unprotect 方法对id字段进行解密
+            var orignalId = int.Parse(_dataProtector.Unprotect(id));
+            var outputModel = _listDataProtect.Where(s => s.Id == orignalId);
+            return Ok(outputModel);
+        }
+        #endregion
+
         //测试 AutoMapper
         public IActionResult AutoMapperIndex()
         {
@@ -183,5 +216,18 @@ namespace Aju.Carefree.Web.Controllers
         public int isMenu { get; set; }
 
         public int parentId { get; set; }
+    }
+
+    public class DataDemoViewModel
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public DataDemoViewModel(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
     }
 }

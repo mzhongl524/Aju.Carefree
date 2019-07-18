@@ -36,7 +36,7 @@
 
 # 本人运营二维码，用于分享DotNet知识!
 ![Image text](https://img2018.cnblogs.com/blog/562098/201905/562098-20190509204404888-1196452045.png)
-
+# Aju.Carefree QQ群：695058251
 
 #好多都在使用各种ORM，但不了解ORM的底层实现，以至于出现问题时一脸懵逼
 # https://github.com/AjuPrince/AjuPrince.ORM  基于.Net 4.5 实现简单的ORM 只用于了解ORM的实现，不可用于生产环境

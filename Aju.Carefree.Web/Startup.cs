@@ -72,6 +72,16 @@ namespace Aju.Carefree.Web
                 options.HeaderName = "X-CSRF-TOKEN-Aju";
                 options.SuppressXFrameOptionsHeader = false;
             });
+
+            services.AddCors((options) =>
+            {
+                options.AddPolicy("", (b) =>
+                {
+                    b.WithOrigins(new string[] { "", "", "" }).AllowAnyHeader().AllowAnyMethod();
+                });
+            });
+
+
             //mvc
             services.AddMvc(options =>
             {
@@ -157,7 +167,7 @@ namespace Aju.Carefree.Web
             loggerFactory.AddNLog();
 
             app.UseMiniProfiler();
-
+            app.UseCors();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

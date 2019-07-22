@@ -1,20 +1,57 @@
 ﻿@{
     ViewData["Title"] = "AddOrEditItem";
     Layout = "~/Views/Shared/_TabLayoutIndex.cshtml";
+    @model ItemViewModel;
+}
+@section head{
+<style>
+    .layui-form-switch {
+        margin-top: 6px;
+    }
+</style>
 }
 <div class="layui-fluid">
-    <form class="layui-form">
-        <div class="layui-form-item">
-            <label class="layui-form-label">角色名称</label>
-            <div class="layui-input-block">
-                <input class="layui-input" type="text" name="name" placeholder="请输入角色名称" />
+    <div class="layui-row">
+        <div class="layui-form">
+            <div class="layui-form-item">
+                <label asp-for="@Model.ParentId" class="layui-form-label">上级</label>
+                <div class="layui-input-block">
+                    <div id="LAY-auth-tree-index"></div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label asp-for="@Model.FullName" class="layui-form-label">名称</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" type="text" name="FullName" placeholder="请输入名称" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label asp-for="@Model.EnCode" class="layui-form-label">编号</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" type="text" name="EnCode" placeholder="请输入编号" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label asp-for="@Model.IsEnabled" class="layui-form-label">选项</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="IsEnabled" lay-skin="switch" lay-text="ON|OFF" checked="checked">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label asp-for="@Model.Remark" class="layui-form-label">描述</label>
+                <div class="layui-input-block">
+                    <textarea class="layui-textarea" type="text" name="Remark" placeholder="请输入描述"></textarea>
+                </div>
             </div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">选择权限</label>
-            <div class="layui-input-block">
-                <div id="LAY-auth-tree-index"></div>
-            </div>
-        </div>
-    </form>
+    </div>
 </div>
+@section Scripts{
+<script>
+    layui.use('form', function ()
+    {
+        // var form = layui.form;
+        //各种基于事件的操作，下面会有进一步介绍
+    });
+</script>
+}

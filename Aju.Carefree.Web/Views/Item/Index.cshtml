@@ -94,6 +94,8 @@
                 if (obj.data.children == null) {
                     itemId = obj.data.id;
                     bindTable(obj.data.id)
+                } else {
+                    itemId = "";
                 }
             }
         });
@@ -105,6 +107,7 @@
                 url: "/Item/GetSubData?id=" + id,
                 loading: true,
                 toolbar: true,
+                height: "350px",
                 title: "xxx",
                 defaultToolbar: ['filter', 'print', 'exports'],
                 cellMinWidth: 80,
@@ -120,7 +123,6 @@
         }
         $(".search_btn").on("click", function ()
         {
-            debugger;
             table.reload("list_itemDetails", {
                 url: "/Item/GetSubData?id=" + itemId,
                 where: {
@@ -128,7 +130,6 @@
                 }
             });
         });
-
         $("#btn_addItem").on("click", function ()
         {
             modalOpen({

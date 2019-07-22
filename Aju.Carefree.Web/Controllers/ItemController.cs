@@ -48,7 +48,11 @@ namespace Aju.Carefree.Web.Controllers
 
         public IActionResult AddOrEditItem(string id)
         {
-            return View();
+            Dto.ItemViewModel viewModel = new Dto.ItemViewModel
+            {
+
+            };
+            return View(viewModel);
         }
     }
 }

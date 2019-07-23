@@ -105,6 +105,7 @@ namespace Aju.Carefree.Dto.ViewModel
         public bool @checked { get; set; } = false;
 
         public List<TreeSelectViewModel> children { get; set; }
-        #endregion
     }
+    #endregion
+
 }

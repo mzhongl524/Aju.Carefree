@@ -43,7 +43,7 @@
                         </div>
                     </div>
                     <hr />
-                    <div class="layui-card-body">
+                    @*<div class="layui-card-body">
                         <div class="layui-col-space12" style="text-align:right;">
                             <div class="layui-btn-group">
                                 <button type="button" class="layui-btn"><i class="layui-icon layui-icon-add-1"></i>增加</button>
@@ -51,9 +51,9 @@
                                 <button type="button" class="layui-btn"><i class="layui-icon layui-icon-delete"></i>删除</button>
                             </div>
                         </div>
-                    </div>
+                    </div>*@
                     <div class="layui-card-body">
-                        <table id="table" class="class=" layui-hide"></table>
+                        <table id="table" class="layui-hide" lay-filter="test"></table>
                     </div>
                 </div>
             </div>
@@ -104,12 +104,13 @@
                 elem: "#table",
                 url: "/Item/GetSubData?id=" + id,
                 loading: true,
-                toolbar: true,
+                toolbar: 'default',
                 height: "350px",
                 title: "xxx",
                 defaultToolbar: ['filter', 'print', 'exports'],
                 cellMinWidth: 80,
                 cols: [[
+                    { type: 'checkbox', fixed: 'left' },
                     { field: 'Id', width: 80, title: 'ID', hide: true },
                     { field: 'ItemName', width: 130, title: '名称' },
                     { field: 'ItemCode', width: 130, title: '编号' },
@@ -118,7 +119,37 @@
                     { field: 'Description', title: '备注' }
                 ]]
             });
+
         }
+
+        //监听头工具栏事件
+        table.on('toolbar(test)', function (obj)
+        {
+            var checkStatus = table.checkStatus(obj.config.id)
+                , data = checkStatus.data; //获取选中的数据
+            switch (obj.event) {
+                case 'add':
+                    layer.msg('添加');
+                    break;
+                case 'update':
+                    if (data.length === 0) {
+                        layer.msg('请选择一行');
+                    } else if (data.length > 1) {
+                        layer.msg('只能同时编辑一个');
+                    } else {
+                        layer.alert('编辑 [id]：' + checkStatus.data[0].Id);
+                    }
+                    break;
+                case 'delete':
+                    if (data.length === 0) {
+                        layer.msg('请选择一行');
+                    } else {
+                        layer.msg('删除');
+                    }
+                    break;
+            };
+        });
+
         $(".search_btn").on("click", function ()
         {
             table.reload("list_itemDetails", {

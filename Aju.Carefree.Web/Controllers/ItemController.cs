@@ -67,7 +67,6 @@ namespace Aju.Carefree.Web.Controllers
         [NetCore.Attributes.AjaxRequestOnly]
         public IActionResult SubmitForm([FromForm]Dto.ItemViewModel viewModel)
         {
-
             return Success("提交成功!");
         }
 

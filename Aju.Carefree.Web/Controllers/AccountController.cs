@@ -60,8 +60,15 @@ namespace Aju.Carefree.Web.Controllers
             string captchaCode = CaptchaHelper.GenerateCaptchaCode();
             var result = CaptchaHelper.GetImage(116, 36, captchaCode);
             HttpContext.Session.SetString(_CaptchaCodeSessionName, captchaCode);
-
             return new FileStreamResult(new MemoryStream(result.CaptchaByteData), "image/png");
+        }
+
+        public IActionResult Logout()
+        {
+            //清楚缓存
+            HttpContext.Session.Remove(_CaptchaCodeSessionName);
+            HttpContext.Session.Remove(_OperatorCacheKey);
+            return Redirect("/Home/Index");
         }
     }
 

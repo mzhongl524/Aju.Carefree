@@ -24,6 +24,7 @@ namespace Aju.Carefree.Dto.ViewModel
     /// <summary>
     /// layer ui Table 数据返回格式
     /// </summary>
+    #region layer ui Table
     public class TableDataModel : FrontPageBaseViewModel
     {
         /// <summary>
@@ -31,6 +32,11 @@ namespace Aju.Carefree.Dto.ViewModel
         /// </summary>
         public int count { get; set; }
     }
+    #endregion
+
+    /// layui AuthTree 返回数据格式
+    /// </summary>
+    #region layui AuthTree 返回数据格式
     public class AuthTreeViewModel : FrontPageBaseViewModel
     {
 
@@ -46,10 +52,12 @@ namespace Aju.Carefree.Dto.ViewModel
         public bool @checked { get; set; }
         public List<AuthTreeViewModelList> list { get; set; }
     }
+    #endregion
 
     /// <summary>
     /// Layui Tree 前端数据 ViewModel
     /// </summary>
+    #region  Layui Tree 
     public class LayuiTreeViewModel
     {
         /// <summary>
@@ -80,5 +88,23 @@ namespace Aju.Carefree.Dto.ViewModel
         public bool disabled { get; set; } = false;
 
         public List<LayuiTreeViewModel> children { get; set; }
+    }
+    #endregion
+
+    /// <summary>
+    ///  Layui treeSelect 前端数据 ViewModel
+    /// </summary>
+    #region Layui treeSelect
+    public class TreeSelectViewModel
+    {
+        public string id { get; set; }
+
+        public string name { get; set; }
+
+        public bool open { get; set; } = true;
+        public bool @checked { get; set; } = false;
+
+        public List<TreeSelectViewModel> children { get; set; }
+        #endregion
     }
 }

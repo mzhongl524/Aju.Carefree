@@ -66,7 +66,7 @@
     <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><i class="layui-icon">&#xe640;</i>删除</a>
 </script>
 @section Scripts{
-<script src="~/js/myLayer.js"></script>
+<script src="~/js/aju.Carefree.Layer.js"></script>
 <script>
     layui.use(['tree', 'jquery', 'table'], function ()
     {
@@ -91,11 +91,9 @@
             , showLine: true//是否开启连接线
             , click: function (obj)
             {
+                itemId = obj.data.id;
                 if (obj.data.children == null) {
-                    itemId = obj.data.id;
                     bindTable(obj.data.id)
-                } else {
-                    itemId = "";
                 }
             }
         });
@@ -136,18 +134,29 @@
                 id: 'From',
                 title: '新增数据字典',
                 width: '500px',
-                height: '560px',
+                height: '500px',
                 url: "/Item/AddOrEditItem",
                 callBack: function (iframeId, index)
                 {
-                    top.frames[iframeId].submitForm(index);
+                    top.frames[iframeId].submit(index);
                 }
             });
         });
         $("#btn_editItem").on("click", function ()
         {
-            if (itemId != null)
-                layer.alert(itemId);
+            if (itemId != undefined) {
+                modalOpen({
+                    id: 'From',
+                    title: '新增数据字典',
+                    width: '500px',
+                    height: '500px',
+                    url: "/Item/AddOrEditItem?id=" + itemId,
+                    callBack: function (iframeId, index)
+                    {
+                        top.frames[iframeId].submit(index);
+                    }
+                });
+            }
         });
     });
 </script>

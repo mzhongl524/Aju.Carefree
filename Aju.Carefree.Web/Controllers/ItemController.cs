@@ -24,18 +24,19 @@ namespace Aju.Carefree.Web.Controllers
             _itemDetailsService = itemDetailsService;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
+        [HttpGet]
         public async Task<string> GetData()
         {
             var data = await _itemService.GetViewModel();
-
             return JsonHelper.Instance.Serialize(data);
         }
-
+        [HttpGet]
         public async Task<string> GetSubData(string id, int page, int limit, string key)
         {
             var data = await _itemDetailsService.FindListByClauseAsync(id, key);
@@ -45,14 +46,36 @@ namespace Aju.Carefree.Web.Controllers
                 data = data.ToList()
             });
         }
-
-        public IActionResult AddOrEditItem(string id)
+        [HttpGet]
+        public async Task<IActionResult> AddOrEditItem(string id)
         {
-            Dto.ItemViewModel viewModel = new Dto.ItemViewModel
-            {
-
-            };
+            Dto.ItemViewModel viewModel = new Dto.ItemViewModel();
+            if (string.IsNullOrEmpty(id))
+                return View(viewModel);
+            var data = await _itemService.GetItemsByPKID(id);
+            viewModel.EnCode = data.EnCode;
+            viewModel.FullName = data.FullName;
+            viewModel.Id = data.Id;
+            viewModel.IsEnabled = (bool)data.EnabledMark;
+            viewModel.ParentId = data.ParentId;
+            viewModel.Remark = data.Description;
             return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [NetCore.Attributes.AjaxRequestOnly]
+        public IActionResult SubmitForm([FromForm]Dto.ItemViewModel viewModel)
+        {
+
+            return Success("提交成功!");
+        }
+
+        [HttpGet]
+        public async Task<string> GetItemData()
+        {
+            var data = await _itemService.GetTreeSelectViewModel();
+            return JsonHelper.Instance.Serialize(data);
         }
     }
 }

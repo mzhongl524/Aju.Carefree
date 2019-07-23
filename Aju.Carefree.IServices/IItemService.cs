@@ -14,5 +14,9 @@ namespace Aju.Carefree.IServices
         Task<bool> DeleteFormAsync(string keyValue);
 
         Task<List<LayuiTreeViewModel>> GetViewModel();
+
+        Task<List<TreeSelectViewModel>> GetTreeSelectViewModel();
+
+        Task<ItemsEntity> GetItemsByPKID(string id);
     }
 }

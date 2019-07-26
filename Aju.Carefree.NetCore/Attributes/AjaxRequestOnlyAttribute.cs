@@ -20,9 +20,6 @@ namespace Aju.Carefree.NetCore.Attributes
 
         public void OnException(ExceptionContext context)
         {
-            var type = System.Reflection.MethodBase.GetCurrentMethod().DeclaringType;
-            Log4NetHelper.WriteError(type, context.Exception);
-
             context.Result = new JsonResult(new { success = false, msg = context.Exception.Message });
             context.HttpContext.Response.StatusCode = HttpStatusCode.InternalServerError.GetHashCode();
             context.ExceptionHandled = true;

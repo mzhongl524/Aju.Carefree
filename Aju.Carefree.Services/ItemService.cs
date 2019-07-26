@@ -1,7 +1,9 @@
-﻿using Aju.Carefree.Dto.ViewModel;
+﻿using Aju.Carefree.Dto;
+using Aju.Carefree.Dto.ViewModel;
 using Aju.Carefree.Entity;
 using Aju.Carefree.IRepositories;
 using Aju.Carefree.IServices;
+using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,15 +14,26 @@ namespace Aju.Carefree.Services
     {
         private readonly IItemRepository _repository;
         private readonly IItemDetailsService _itemDetailsService;
-        public ItemService(IItemRepository repository, IItemDetailsService itemDetailsService)
+        private IMapper _mapper { get; set; }
+
+        public ItemService(IItemRepository repository, IItemDetailsService itemDetailsService, IMapper mapper)
         {
             _repository = repository;
             _itemDetailsService = itemDetailsService;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<ItemsEntity>> GetListAsync()
         {
             return await _repository.FindListByClauseAsync(s => s.DeleteMark == false && s.EnabledMark == true);
+        }
+
+        public async Task<bool> SubmitFormAsync(ItemDto dto, string keyValue)
+        {
+            if (string.IsNullOrWhiteSpace(dto.ParentId))
+                dto.ParentId = "0";
+            var entity = _mapper.Map<ItemDto, ItemsEntity>(dto);
+            return await SubmitFormAsync(entity, entity.Id);
         }
 
         public async Task<bool> SubmitFormAsync(ItemsEntity entity, string keyValue)
@@ -32,9 +45,16 @@ namespace Aju.Carefree.Services
                 return await _repository.UpdateAsync(entity);
             }
             //新增
-            await entity.Create();
-            entity.DeleteMark = false;
-            return await _repository.InsertAsync(entity) >= 1;
+            try
+            {
+                await entity.Create();
+                entity.DeleteMark = false;
+                return await _repository.InsertAsync(entity) >= 1;
+            }
+            catch (System.Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<bool> DeleteFormAsync(string keyValue)

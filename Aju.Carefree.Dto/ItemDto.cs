@@ -1,7 +1,12 @@
 ﻿namespace Aju.Carefree.Dto
 {
-    public class ItemViewModel
+    public class ItemDto
     {
+        public ItemDto()
+        {
+            ParentId = "0";
+            IsEnabled = true;
+        }
         public string Id { get; set; }
 
         public string ParentId { get; set; }

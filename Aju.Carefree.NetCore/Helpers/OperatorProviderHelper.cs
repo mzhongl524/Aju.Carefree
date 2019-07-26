@@ -6,22 +6,21 @@ namespace Aju.Carefree.NetCore.Helpers
 {
     public class OperatorProviderHelper
     {
+        private static OperatorProviderHelper _operatorProviderHelper = new OperatorProviderHelper();
+        public static OperatorProviderHelper Instance { get { return _operatorProviderHelper; } }
+
         private static readonly string _operatorCacheKey = "Aju_Prince_OperatorProvider_20190708";
 
         public int Expiration { get; set; } = 10 * 60;
-
-
-        public static OperatorProviderHelper Provider { get; }
-
-
         public async Task AddCurrent(OperatorModel operatorModel)
         {
             await DistributedCacheManager.SetAsync(_operatorCacheKey, operatorModel, Expiration);
         }
         public async Task<OperatorModel> GetCurrent()
         {
-            var result = await DistributedCacheManager.GetAsync(_operatorCacheKey, token: default);
-            return (OperatorModel)ByteConvertHelper.Bytes2Object(result);
+            var result = await DistributedCacheManager.GetAsync<OperatorModel>(_operatorCacheKey);
+            return result;
+            // return (OperatorModel)ByteConvertHelper.Bytes2Object(result);
         }
         public async Task RemoveCurrent()
         {

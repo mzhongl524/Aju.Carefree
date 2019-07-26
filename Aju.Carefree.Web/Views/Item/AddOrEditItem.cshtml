@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "AddOrEditItem";
     Layout = "~/Views/Shared/_TabLayoutIndex.cshtml";
-    @model ItemViewModel;
+    @model ItemDto;
 }
 @section head{
     <style>
@@ -63,7 +63,7 @@
         elem: '#ParentId',
         dataUrl: '/Item/GetItemData',
         placeholder: '请选择上级菜单',
-        nodeValue: '@Model.Id',
+        nodeValue: '@Model.ParentId',
         elemExt: 'tree',
         clickCall: function (d)
         {

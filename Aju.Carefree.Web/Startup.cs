@@ -1,10 +1,12 @@
-﻿using Aju.Carefree.Common;
+﻿using Aju.Carefree.AutoMapperConfig;
+using Aju.Carefree.Common;
 using Aju.Carefree.Common.DataBaseCore;
 using Aju.Carefree.NetCore.Extensions;
 using Aju.Carefree.NetCore.IOC;
 using Aju.Carefree.Web.Filter;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -64,7 +66,10 @@ namespace Aju.Carefree.Web
 
 
 
-            services.AddSession();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);//设置session 的过期时间
+            });
             //CSRF
             services.AddAntiforgery(options =>
             {
@@ -81,7 +86,8 @@ namespace Aju.Carefree.Web
                 });
             });
 
-
+            //AutoMapper
+            services.AddAutoMapper(typeof(CarefreeProfile));
             //mvc
             services.AddMvc(options =>
             {
@@ -168,6 +174,7 @@ namespace Aju.Carefree.Web
 
             app.UseMiniProfiler();
             app.UseCors();
+            Mappings.RegisterMappings();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

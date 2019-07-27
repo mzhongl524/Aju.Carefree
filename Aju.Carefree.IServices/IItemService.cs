@@ -20,6 +20,6 @@ namespace Aju.Carefree.IServices
 
         Task<List<TreeSelectViewModel>> GetTreeSelectViewModel();
 
-        Task<ItemsEntity> GetItemsByPKID(string id);
+        Task<ItemDto> GetItemsByPKID(string id);
     }
 }

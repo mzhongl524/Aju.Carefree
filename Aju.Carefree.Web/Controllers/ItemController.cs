@@ -1,7 +1,6 @@
 ﻿using Aju.Carefree.Common;
 using Aju.Carefree.Dto.ViewModel;
 using Aju.Carefree.IServices;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,12 +15,11 @@ namespace Aju.Carefree.Web.Controllers
     {
         private readonly IItemService _itemService;
         private readonly IItemDetailsService _itemDetailsService;
-        private IMapper _mapper { get; set; }
-        public ItemController(IItemService itemService, IItemDetailsService itemDetailsService, IMapper mapper)
+
+        public ItemController(IItemService itemService, IItemDetailsService itemDetailsService)
         {
             _itemService = itemService;
             _itemDetailsService = itemDetailsService;
-            _mapper = mapper;
         }
 
         [HttpGet]
@@ -53,13 +51,7 @@ namespace Aju.Carefree.Web.Controllers
             if (string.IsNullOrEmpty(id))
                 return View(viewModel);
             var data = await _itemService.GetItemsByPKID(id);
-            viewModel.EnCode = data.EnCode;
-            viewModel.FullName = data.FullName;
-            viewModel.Id = data.Id;
-            viewModel.IsEnabled = (bool)data.EnabledMark;
-            viewModel.ParentId = data.ParentId;
-            viewModel.Remark = data.Description;
-            return View(viewModel);
+            return View(data);
         }
 
         [HttpPost]
@@ -67,8 +59,6 @@ namespace Aju.Carefree.Web.Controllers
         [NetCore.Attributes.AjaxRequestOnly]
         public async Task<IActionResult> SubmitForm([FromForm]Dto.ItemDto viewModel)
         {
-            //var entity = _mapper.Map<Dto.ItemDto, Entity.ItemsEntity>(viewModel);
-            //await _itemService.SubmitFormAsync(entity, viewModel.Id);
             await _itemService.SubmitFormAsync(viewModel, viewModel.Id);
             return Success("提交成功!");
         }

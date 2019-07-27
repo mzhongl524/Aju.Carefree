@@ -45,16 +45,9 @@ namespace Aju.Carefree.Services
                 return await _repository.UpdateAsync(entity);
             }
             //新增
-            try
-            {
-                await entity.Create();
-                entity.DeleteMark = false;
-                return await _repository.InsertAsync(entity) >= 1;
-            }
-            catch (System.Exception ex)
-            {
-                throw ex;
-            }
+            await entity.Create();
+            entity.DeleteMark = false;
+            return await _repository.InsertAsync(entity) >= 1;
         }
 
         public async Task<bool> DeleteFormAsync(string keyValue)
@@ -139,9 +132,10 @@ namespace Aju.Carefree.Services
             return viewModel;
         }
 
-        public async Task<ItemsEntity> GetItemsByPKID(string id)
+        public async Task<ItemDto> GetItemsByPKID(string id)
         {
-            return await _repository.FindByIdAsync(id);
+            var entity = await _repository.FindByIdAsync(id);
+            return _mapper.Map<ItemsEntity, ItemDto>(entity);
         }
     }
 }

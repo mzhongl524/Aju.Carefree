@@ -30,7 +30,7 @@
             <div class="layui-form-item">
                 <label asp-for="@Model.EnCode" class="layui-form-label">编号</label>
                 <div class="layui-input-block">
-                    <input class="layui-input" type="text" name="EnCode" required lay-verify="EnCode" lay-reqText="请填写编号" placeholder="请输入编号" value="@Model.EnCode"  />
+                    <input class="layui-input" type="text" name="EnCode" required lay-verify="EnCode" lay-reqText="请填写编号" placeholder="请输入编号" value="@Model.EnCode" />
                 </div>
             </div>
             <div class="layui-form-item">
@@ -49,7 +49,7 @@
             <div class="layui-form-item">
                 <label asp-for="@Model.Remark" class="layui-form-label">描述</label>
                 <div class="layui-input-block">
-                    <textarea class="layui-textarea" type="text" name="Remark" placeholder="请输入描述"  value="@Model.Remark" ></textarea>
+                    <textarea class="layui-textarea" type="text" name="Remark" placeholder="请输入描述">@Model.Remark</textarea>
                 </div>
             </div>
         </form>
@@ -59,7 +59,8 @@
     <script src="~/js/aju.Carefree.treeSelect.js"></script>
     <script src="~/js/aju.Carefree.Layer.js"></script>
     <script>
-    AjuCarefree_TreeSelect({
+
+   AjuCarefree_TreeSelect({
         elem: '#ParentId',
         dataUrl: '/Item/GetItemData',
         placeholder: '请选择上级菜单',
@@ -70,6 +71,8 @@
             document.getElementById("ParentId").value = d;
         }
     });
+
+
     function submit(index)
     {
         layui.use(['form', 'jquery','layer'], function ()
@@ -81,7 +84,8 @@
                 param: $("#form1").serialize(),
                 success: function ()
                 {
-                    reload();
+                    //window.location.reload();
+                   // reload();
                 }
             });
         });

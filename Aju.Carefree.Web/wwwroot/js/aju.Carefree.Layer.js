@@ -78,15 +78,15 @@ modalAlert = function (content, type)
 modalMsg = function (content, type)
 {
     if (type !== undefined) {
-        var icon = "";
+        var icon = 0;
         if (type === 'success') {
-            icon = "fa-check-circle";
+            icon = 1;
         }
         if (type === 'error') {
-            icon = "fa-times-circle";
+            icon = 2;
         }
         if (type === 'warning') {
-            icon = "fa-exclamation-circle";
+            icon = 0;
         }
         top.layer.msg(content, { icon: icon, time: 4000, shift: 5 });
         top.$(".layui-layer-msg").find('i.' + icon).parents('.layui-layer-msg').addClass('layui-layer-msg-' + type);
@@ -120,11 +120,11 @@ submitForm = function (options)
         close: true
     };
     var options = $.extend(defaults, options);
-    $.loading(true, options.loading);
+    loading(true, options.loading);
     window.setTimeout(function ()
     {
-        if ($('[name=__RequestVerificationToken]').length > 0) {
-            options.param["__RequestVerificationToken"] = $('[name=__RequestVerificationToken]').val();
+        if ($('[name=AntiforgeryKey_Aju]').length > 0) {
+            options.param["AntiforgeryKey_Aju"] = $('[name=AntiforgeryKey_Aju]').val();
         }
         $.ajax({
             url: options.url,
@@ -135,26 +135,28 @@ submitForm = function (options)
             {
                 if (data.state === "success") {
                     options.success(data);
-                    $.modalMsg(data.message, data.state);
+                    modalMsg(data.message, data.state);
                     if (options.close === true) {
-                        $.modalClose();
+                        modalClose();
                     }
                 } else {
-                    $.modalAlert(data.message, data.state);
+                    modalAlert(data.message, data.state);
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown)
             {
-                $.loading(false);
-                $.modalMsg(errorThrown, "error");
+                loading(false);
+                //alert(errorThrown);
+                console.log(errorThrown);
+                modalMsg(textStatus, "error");
             },
             beforeSend: function ()
             {
-                $.loading(true, options.loading);
+                loading(true, options.loading);
             },
             complete: function ()
             {
-                $.loading(false);
+                loading(false);
             }
         });
     }, 500);
@@ -212,3 +214,29 @@ deleteForm = function (options)
         }
     });
 };
+
+reload = function ()
+{
+    location.reload();
+    return false;
+};
+
+loading = function (bool, text)
+{
+    var $loadingpage = top.$("#loadingPage");
+    var $loadingtext = $loadingpage.find('.loading-content');
+    if (bool) {
+        $loadingpage.show();
+    } else {
+        if ($loadingtext.attr('istableloading') == undefined) {
+            $loadingpage.hide();
+        }
+    }
+    if (!!text) {
+        $loadingtext.html(text);
+    } else {
+        $loadingtext.html("数据加载中，请稍后…");
+    }
+    $loadingtext.css("left", (top.$('body').width() - $loadingtext.width()) / 2 - 50);
+    $loadingtext.css("top", (top.$('body').height() - $loadingtext.height()) / 2);
+}

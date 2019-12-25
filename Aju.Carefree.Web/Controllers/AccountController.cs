@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Aju.Carefree.Web.Controllers
 {
@@ -17,7 +18,7 @@ namespace Aju.Carefree.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public string Login(LoginViewModel viewModel)
+        public async Task<string> Login(LoginViewModel viewModel)
         {
             BaseResult result = new BaseResult();
             //得到图片验证码
@@ -26,7 +27,7 @@ namespace Aju.Carefree.Web.Controllers
             {
                 //模拟登录加入缓存
                 var admin = AddAdminCache();
-                HttpContext.Session.Set(_OperatorCacheKey, ByteConvertHelper.Object2Bytes(admin));
+                await OperatorProviderHelper.Instance.AddCurrent(admin);
                 HttpContext.Session.Remove(_CaptchaCodeSessionName);
                 return JsonHelper.Instance.Serialize(result);
             }
@@ -60,8 +61,14 @@ namespace Aju.Carefree.Web.Controllers
             string captchaCode = CaptchaHelper.GenerateCaptchaCode();
             var result = CaptchaHelper.GetImage(116, 36, captchaCode);
             HttpContext.Session.SetString(_CaptchaCodeSessionName, captchaCode);
-
             return new FileStreamResult(new MemoryStream(result.CaptchaByteData), "image/png");
+        }
+
+        public IActionResult Logout()
+        {
+            //清楚缓存
+            HttpContext.Session.Remove(_CaptchaCodeSessionName);
+            return Redirect("/Home/Index");
         }
     }
 

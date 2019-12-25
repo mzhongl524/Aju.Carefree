@@ -1,20 +1,94 @@
 ﻿@{
     ViewData["Title"] = "AddOrEditItem";
     Layout = "~/Views/Shared/_TabLayoutIndex.cshtml";
+    @model ItemDto;
+}
+@section head{
+    <style>
+        .layui-form-switch {
+            margin-top: 6px;
+        }
+    </style>
 }
 <div class="layui-fluid">
-    <form class="layui-form">
-        <div class="layui-form-item">
-            <label class="layui-form-label">角色名称</label>
-            <div class="layui-input-block">
-                <input class="layui-input" type="text" name="name" placeholder="请输入角色名称" />
+    <div class="layui-row">
+        <form class="layui-form" id="form1">
+            @Html.AntiForgeryToken()
+            <div class="layui-form-item">
+                <input type="text" name="Id" value="@Model.Id" style="display:none" />
+                <label asp-for="@Model.ParentId" class="layui-form-label">上级</label>
+                <div class="layui-input-block">
+                    <input type="text" id="ParentId" name="ParentId" lay-filter="tree" required lay-verify="ParentId" lay-reqText="请选择上级" class="layui-input">
+                </div>
             </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">选择权限</label>
-            <div class="layui-input-block">
-                <div id="LAY-auth-tree-index"></div>
+            <div class="layui-form-item">
+                <label asp-for="@Model.FullName" class="layui-form-label">名称</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" type="text" name="FullName" required lay-verify="FullName" lay-reqText="请填写名称" placeholder="请输入名称" value="@Model.FullName" />
+                </div>
             </div>
-        </div>
-    </form>
+            <div class="layui-form-item">
+                <label asp-for="@Model.EnCode" class="layui-form-label">编号</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" type="text" name="EnCode" required lay-verify="EnCode" lay-reqText="请填写编号" placeholder="请输入编号" value="@Model.EnCode" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label asp-for="@Model.IsEnabled" class="layui-form-label">选项</label>
+                <div class="layui-input-block">
+                    @if (Model.IsEnabled)
+                    {
+                        <input type="checkbox" name="IsEnabled" lay-skin="switch" lay-text="ON|OFF" checked="checked">
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="IsEnabled" lay-skin="switch" lay-text="ON|OFF" checked="">
+                    }
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label asp-for="@Model.Remark" class="layui-form-label">描述</label>
+                <div class="layui-input-block">
+                    <textarea class="layui-textarea" type="text" name="Remark" placeholder="请输入描述">@Model.Remark</textarea>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
+@section Scripts{
+    <script src="~/js/aju.Carefree.treeSelect.js"></script>
+    <script src="~/js/aju.Carefree.Layer.js"></script>
+    <script>
+
+   AjuCarefree_TreeSelect({
+        elem: '#ParentId',
+        dataUrl: '/Item/GetItemData',
+        placeholder: '请选择上级菜单',
+        nodeValue: '@Model.ParentId',
+        elemExt: 'tree',
+        clickCall: function (d)
+        {
+            document.getElementById("ParentId").value = d;
+        }
+    });
+
+
+    function submit(index)
+    {
+        layui.use(['form', 'jquery','layer'], function ()
+        {
+            var $ = layui.$, form = layui.form;
+            layer = layui.layer;
+            submitForm({
+                url: "/Item/SubmitForm",
+                param: $("#form1").serialize(),
+                success: function ()
+                {
+                    //window.location.reload();
+                   // reload();
+                }
+            });
+        });
+    }
+    </script>
+}

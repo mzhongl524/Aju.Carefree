@@ -10,7 +10,7 @@ namespace Aju.Carefree.NetCore.BaseModel
         {
             var entity = this as ICreationAudited;
             entity.Id = UtilHelper.GetGUID();
-            var loginInfo = await OperatorProviderHelper.Provider.GetCurrent();
+            var loginInfo = await OperatorProviderHelper.Instance.GetCurrent();
             if (loginInfo != null)
                 entity.CreatorUserId = loginInfo.UserId;
             entity.CreatorTime = DateTime.Now;
@@ -20,7 +20,7 @@ namespace Aju.Carefree.NetCore.BaseModel
         {
             var entity = this as IModificationAudited;
             entity.Id = keyValue;
-            var LoginInfo = await OperatorProviderHelper.Provider.GetCurrent();
+            var LoginInfo = await OperatorProviderHelper.Instance.GetCurrent();
             if (LoginInfo != null)
             {
                 entity.LastModifyUserId = LoginInfo.UserId;
@@ -30,7 +30,7 @@ namespace Aju.Carefree.NetCore.BaseModel
         public async Task Remove()
         {
             var entity = this as IDeleteAudited;
-            var LoginInfo = await OperatorProviderHelper.Provider.GetCurrent();
+            var LoginInfo = await OperatorProviderHelper.Instance.GetCurrent();
             if (LoginInfo != null)
             {
                 entity.DeleteUserId = LoginInfo.UserId;

@@ -1,38 +1,35 @@
-﻿using Aju.Carefree.Common;
+﻿using Aju.Carefree.AutoMapperConfig;
 using Aju.Carefree.Common.DataBaseCore;
 using Aju.Carefree.NetCore.Extensions;
-using Aju.Carefree.NetCore.IOC;
 using Aju.Carefree.Web.Filter;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
+using AspectCore.Configuration;
+using AspectCore.Injector;
+using AutoMapper;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NLog;
 using NLog.Extensions.Logging;
 using NLog.Web;
 using System;
-using System.Reflection;
 
 namespace Aju.Carefree.Web
 {
     public class Startup
     {
-        //private readonly Logger logger = LogManager.GetCurrentClassLogger();
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            env.ConfigureNLog("Nlog.config");
         }
 
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             //数据库配置
             services.Configure<DbOption>("Aju.Carefree", Configuration.GetSection("DbOption"));
@@ -64,7 +61,10 @@ namespace Aju.Carefree.Web
 
 
 
-            services.AddSession();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);//设置session 的过期时间
+            });
             //CSRF
             services.AddAntiforgery(options =>
             {
@@ -72,11 +72,22 @@ namespace Aju.Carefree.Web
                 options.HeaderName = "X-CSRF-TOKEN-Aju";
                 options.SuppressXFrameOptionsHeader = false;
             });
+
+            services.AddCors((options) =>
+            {
+                options.AddPolicy("", (b) =>
+                {
+                    b.WithOrigins(new string[] { "", "", "" }).AllowAnyHeader().AllowAnyMethod();
+                });
+            });
+
+            //AutoMapper
+            services.AddAutoMapper(typeof(CarefreeProfile));
             //mvc
             services.AddMvc(options =>
             {
                 options.Filters.Add(new GlobalExceptionFilter());
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
             .AddControllersAsServices()
             .AddFluentValidation(fv =>
             {
@@ -135,11 +146,10 @@ namespace Aju.Carefree.Web
             services.AddSingleton(Configuration)
                 .AddScopedAssembly("Aju.Carefree.IRepositories", "Aju.Carefree.Repositories")//注入仓储
                 .AddScopedAssembly("Aju.Carefree.IServices", "Aju.Carefree.Services"); //注入服务
-            return AspectCoreContainer.BuildServiceProvider(services);//接入AspectCore.Injector
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -153,16 +163,29 @@ namespace Aju.Carefree.Web
             app.UseCookiePolicy();
             app.UseSession();
             app.UseAuthentication();
-            //add NLog to ASP.NET Core
-            loggerFactory.AddNLog();
-
             app.UseMiniProfiler();
+            app.UseCors();
+            app.UseRouting();
 
-            app.UseMvc(routes =>
+            app.UseEndpoints(entpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Login}/{action=Index}/{id?}");
+                entpoints.MapDefaultControllerRoute();
+                entpoints.MapControllerRoute(name: "default", pattern: "{controller=Login}/{action=Index}/{id?}");
+            });
+            //  Mappings.RegisterMappings();
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(
+            //        name: "default",
+            //        template: "{controller=Login}/{action=Index}/{id?}");
+            //});
+        }
+
+        public void ConfigureContainer(IServiceContainer builder)
+        {
+            builder.Configure(config =>
+            {
+                //  config.Interceptors.AddTyped<>();
             });
         }
     }

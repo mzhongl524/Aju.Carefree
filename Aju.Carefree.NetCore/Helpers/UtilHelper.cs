@@ -6,7 +6,7 @@ namespace Aju.Carefree.NetCore.Helpers
     {
         public static string GetGUID()
         {
-            return Guid.NewGuid().ToString("X2");
+            return Guid.NewGuid().ToString("N");
         }
     }
 }

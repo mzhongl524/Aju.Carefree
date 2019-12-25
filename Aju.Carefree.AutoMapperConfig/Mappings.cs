@@ -22,10 +22,10 @@ namespace Aju.Carefree.AutoMapperConfig
                 if (type == typeof(IProfile))
                 {
                     //注册映射
-                    Mapper.Initialize(y =>
-                    {
-                        y.AddProfiles(type); // Initialise each Profile classe
-                    });
+                    //Mapper.Initialize(y =>
+                    //{
+                    //    y.AddMaps(type); // Initialise each Profile classe
+                    //});
                 }
             }
         }

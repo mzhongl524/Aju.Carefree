@@ -2,6 +2,8 @@
 后端使用.Net Core 2.2 + Redis + SqlSugar + Autofac/Aspectcore Framework + AutoMapper + .....堆起来的后台框架<br/>
 页面布局使用 X-Admin、layui
 
+## Aju.Carefree QQ群：695058251
+
 ## 开源说明
  1、采用.Net Core 2.2 框架进行搭建 <br/>
  2、项目中引用了一些常用的框架（如：Autofac/Aspectcore Framework 、AutoMapper）<br/>

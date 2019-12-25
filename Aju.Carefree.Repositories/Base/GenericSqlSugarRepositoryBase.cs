@@ -242,7 +242,7 @@ namespace Aju.Carefree.Repositories.SqlSugar
 
         public async Task<bool> UpdateAsync(T entity)
         {
-            return (bool)await SqlSugarExtAsync(async (db) => await db.Updateable(entity).ExecuteCommandAsync());
+            return (bool)await SqlSugarExtAsync(async (db) => await db.Updateable(entity).ExecuteCommandAsync() > 0);
         }
 
         public DbResult<T> UserTran(Func<T> func)

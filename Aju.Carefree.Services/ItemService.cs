@@ -1,7 +1,9 @@
-﻿using Aju.Carefree.Dto.ViewModel;
+﻿using Aju.Carefree.Dto;
+using Aju.Carefree.Dto.ViewModel;
 using Aju.Carefree.Entity;
 using Aju.Carefree.IRepositories;
 using Aju.Carefree.IServices;
+using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,15 +14,26 @@ namespace Aju.Carefree.Services
     {
         private readonly IItemRepository _repository;
         private readonly IItemDetailsService _itemDetailsService;
-        public ItemService(IItemRepository repository, IItemDetailsService itemDetailsService)
+        private IMapper _mapper { get; set; }
+
+        public ItemService(IItemRepository repository, IItemDetailsService itemDetailsService, IMapper mapper)
         {
             _repository = repository;
             _itemDetailsService = itemDetailsService;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<ItemsEntity>> GetListAsync()
         {
             return await _repository.FindListByClauseAsync(s => s.DeleteMark == false && s.EnabledMark == true);
+        }
+
+        public async Task<bool> SubmitFormAsync(ItemDto dto, string keyValue)
+        {
+            if (string.IsNullOrWhiteSpace(dto.ParentId))
+                dto.ParentId = "0";
+            var entity = _mapper.Map<ItemDto, ItemsEntity>(dto);
+            return await SubmitFormAsync(entity, entity.Id);
         }
 
         public async Task<bool> SubmitFormAsync(ItemsEntity entity, string keyValue)
@@ -53,9 +66,11 @@ namespace Aju.Carefree.Services
             var list = await _repository.FindListByClauseAsync(s => s.EnabledMark == true && s.DeleteMark == false);
             list.Where(s => s.ParentId == "0").ToList().ForEach(item =>
             {
-                var viewModel = new LayuiTreeViewModel();
-                viewModel.id = item.Id;
-                viewModel.title = item.FullName;
+                var viewModel = new LayuiTreeViewModel
+                {
+                    id = item.Id,
+                    title = item.FullName
+                };
                 GetItemsEntityByParentId(item.Id, viewModel, list);
                 viewModelList.Add(viewModel);
             });
@@ -69,9 +84,11 @@ namespace Aju.Carefree.Services
             List<LayuiTreeViewModel> layuiTreeViewModelsList = new List<LayuiTreeViewModel>();
             items.ToList().ForEach(item =>
             {
-                LayuiTreeViewModel layuiTreeViewModel = new LayuiTreeViewModel();
-                layuiTreeViewModel.id = item.Id;
-                layuiTreeViewModel.title = item.FullName;
+                LayuiTreeViewModel layuiTreeViewModel = new LayuiTreeViewModel
+                {
+                    id = item.Id,
+                    title = item.FullName
+                };
                 GetItemsEntityByParentId(item.Id, layuiTreeViewModel, list);
                 layuiTreeViewModelsList.Add(layuiTreeViewModel);
             });
@@ -79,42 +96,47 @@ namespace Aju.Carefree.Services
             return viewModel;
         }
 
-        //private async Task<LayuiTreeViewModel> GetItemsEntityByParentId(LayuiTreeViewModel viewModel, string parentId = "0")
-        //{
-        //    var list = await _repository.FindListByClauseAsync(s => s.ParentId.Equals(parentId) && s.EnabledMark == true && s.DeleteMark == false);
-        //    if (!list.Any()) return null;
-        //    List<LayuiTreeViewModel> jdList = new List<LayuiTreeViewModel>();
+        public async Task<List<TreeSelectViewModel>> GetTreeSelectViewModel()
+        {
+            var viewModelList = new List<TreeSelectViewModel>();
+            var list = await _repository.FindListByClauseAsync(s => s.EnabledMark == true && s.DeleteMark == false);
+            list.Where(s => s.ParentId == "0").ToList().ForEach(item =>
+            {
+                var viewModel = new TreeSelectViewModel
+                {
+                    id = item.Id,
+                    name = item.FullName
+                };
+                GetItemsEntityByParentId(item.Id, viewModel, list);
+                viewModelList.Add(viewModel);
+            });
+            return viewModelList;
+        }
 
-        //    list.ToList().ForEach(async item =>
-        //    {
-        //        LayuiTreeViewModel layuiTreeViewModel = new LayuiTreeViewModel();
-        //        layuiTreeViewModel.id = item.Id;
-        //        layuiTreeViewModel.title = item.FullName;
-        //        //递归循环
-        //        await GetItemsEntityByParentId(layuiTreeViewModel, item.Id);
-        //        jdList.Add(layuiTreeViewModel);
-        //    });
-        //    viewModel.children = jdList;
-        //    return viewModel;
-        //}
+        private TreeSelectViewModel GetItemsEntityByParentId(string parendId, TreeSelectViewModel viewModel, IEnumerable<ItemsEntity> list)
+        {
+            var items = list.Where(s => s.ParentId.Equals(parendId));
+            if (!items.Any()) return null;
+            List<TreeSelectViewModel> layuiTreeViewModelsList = new List<TreeSelectViewModel>();
+            items.ToList().ForEach(item =>
+            {
+                TreeSelectViewModel layuiTreeViewModel = new TreeSelectViewModel
+                {
+                    id = item.Id,
+                    name = item.FullName
+                };
+                GetItemsEntityByParentId(item.Id, layuiTreeViewModel, list);
+                layuiTreeViewModelsList.Add(layuiTreeViewModel);
+            });
+            viewModel.children = layuiTreeViewModelsList;
+            return viewModel;
+        }
 
-        //private async Task<List<LayuiTreeViewModel>> GetItemsEntityByParentIdExt(string parentId)
-        //{
-        //    var viewModel = new List<LayuiTreeViewModel>();
-        //    var list = await _repository.FindListByClauseAsync(s => s.ParentId.Equals(parentId) && s.EnabledMark == true && s.DeleteMark == false);
-        //    list.ToList().ForEach(async item =>
-        //    {
-        //        viewModel.Add(new LayuiTreeViewModel
-        //        {
-        //            title = item.FullName,
-        //            spread = true,
-        //            @checked = false,
-        //            id = item.Id,
-        //            children =
-        //        });
-        //    });
-        //    return viewModel;
-        //}
+        public async Task<ItemDto> GetItemsByPKID(string id)
+        {
+            var entity = await _repository.FindByIdAsync(id);
+            return _mapper.Map<ItemsEntity, ItemDto>(entity);
+        }
     }
 }
 

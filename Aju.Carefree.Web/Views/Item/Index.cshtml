@@ -43,7 +43,7 @@
                         </div>
                     </div>
                     <hr />
-                    <div class="layui-card-body">
+                    @*<div class="layui-card-body">
                         <div class="layui-col-space12" style="text-align:right;">
                             <div class="layui-btn-group">
                                 <button type="button" class="layui-btn"><i class="layui-icon layui-icon-add-1"></i>增加</button>
@@ -51,9 +51,9 @@
                                 <button type="button" class="layui-btn"><i class="layui-icon layui-icon-delete"></i>删除</button>
                             </div>
                         </div>
-                    </div>
+                    </div>*@
                     <div class="layui-card-body">
-                        <table id="table" class="class=" layui-hide"></table>
+                        <table id="table" class="layui-hide" lay-filter="test"></table>
                     </div>
                 </div>
             </div>
@@ -66,7 +66,7 @@
     <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><i class="layui-icon">&#xe640;</i>删除</a>
 </script>
 @section Scripts{
-<script src="~/js/myLayer.js"></script>
+<script src="~/js/aju.Carefree.Layer.js"></script>
 <script>
     layui.use(['tree', 'jquery', 'table'], function ()
     {
@@ -91,8 +91,8 @@
             , showLine: true//是否开启连接线
             , click: function (obj)
             {
+                itemId = obj.data.id;
                 if (obj.data.children == null) {
-                    itemId = obj.data.id;
                     bindTable(obj.data.id)
                 }
             }
@@ -104,11 +104,13 @@
                 elem: "#table",
                 url: "/Item/GetSubData?id=" + id,
                 loading: true,
-                toolbar: true,
+                toolbar: 'default',
+                height: "350px",
                 title: "xxx",
                 defaultToolbar: ['filter', 'print', 'exports'],
                 cellMinWidth: 80,
                 cols: [[
+                    { type: 'checkbox', fixed: 'left' },
                     { field: 'Id', width: 80, title: 'ID', hide: true },
                     { field: 'ItemName', width: 130, title: '名称' },
                     { field: 'ItemCode', width: 130, title: '编号' },
@@ -117,10 +119,39 @@
                     { field: 'Description', title: '备注' }
                 ]]
             });
+
         }
+
+        //监听头工具栏事件
+        table.on('toolbar(test)', function (obj)
+        {
+            var checkStatus = table.checkStatus(obj.config.id)
+                , data = checkStatus.data; //获取选中的数据
+            switch (obj.event) {
+                case 'add':
+                    layer.msg('添加');
+                    break;
+                case 'update':
+                    if (data.length === 0) {
+                        layer.msg('请选择一行');
+                    } else if (data.length > 1) {
+                        layer.msg('只能同时编辑一个');
+                    } else {
+                        layer.alert('编辑 [id]：' + checkStatus.data[0].Id);
+                    }
+                    break;
+                case 'delete':
+                    if (data.length === 0) {
+                        layer.msg('请选择一行');
+                    } else {
+                        layer.msg('删除');
+                    }
+                    break;
+            };
+        });
+
         $(".search_btn").on("click", function ()
         {
-            debugger;
             table.reload("list_itemDetails", {
                 url: "/Item/GetSubData?id=" + itemId,
                 where: {
@@ -128,25 +159,35 @@
                 }
             });
         });
-
         $("#btn_addItem").on("click", function ()
         {
             modalOpen({
                 id: 'From',
                 title: '新增数据字典',
                 width: '500px',
-                height: '560px',
+                height: '500px',
                 url: "/Item/AddOrEditItem",
                 callBack: function (iframeId, index)
                 {
-                    top.frames[iframeId].submitForm(index);
+                    top.frames[iframeId].submit(index);
                 }
             });
         });
         $("#btn_editItem").on("click", function ()
         {
-            if (itemId != null)
-                layer.alert(itemId);
+            if (itemId != undefined) {
+                modalOpen({
+                    id: 'From',
+                    title: '新增数据字典',
+                    width: '500px',
+                    height: '500px',
+                    url: "/Item/AddOrEditItem?id=" + itemId,
+                    callBack: function (iframeId, index)
+                    {
+                        top.frames[iframeId].submit(index);
+                    }
+                });
+            }
         });
     });
 </script>
